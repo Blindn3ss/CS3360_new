@@ -1,0 +1,6 @@
+yardId,yardName,yardLocation,yardCapacity,surfaceType,pricePerTimeSlot,description
+1,Greenfield Arena,Downtown City,1000,Grass,150,"A spacious football yard in the heart of the city, perfect for tournaments."
+2,Riverside Stadium,Riverside Park,500,Turf,120,"A scenic location by the river, ideal for friendly matches and events."
+3,Oakwood Ground,Oakwood Avenue,750,Grass,130,"A well-maintained football ground surrounded by oak trees, suitable for all kinds of games."
+4,Starfield Pitch,Starfield Mall Area,1200,Turf,200,"A premium yard with state-of-the-art facilities, ideal for professional matches."
+5,Sunset Field,Sunset Boulevard,600,Indoor,110,"A cozy yard with a great view of the sunset, perfect for casual games."

@@ -1,0 +1,6 @@
+customerId,username,password,fullName,phoneNumber,email
+1,john_doe,pass1234,John Doe,555-1234,john.doe@email.com
+2,jane_smith,password1,Jane Smith,555-5678,jane.smith@email.com
+3,mike_jones,secret123,Mike Jones,555-8765,mike.jones@email.com
+4,alice_lee,abcdefgh,Alice Lee,555-4321,alice.lee@email.com
+5,bob_white,letmein123,Bob White,555-6789,bob.white@email.com
