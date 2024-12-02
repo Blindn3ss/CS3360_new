@@ -1,7 +1,8 @@
 package org.myapp.DAO;
 
-import org.myapp.Database.Database;
 import org.myapp.Model.Booking;
+import org.myapp.Model.BookingStatus;
+import org.myapp.Database.Database;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,9 +19,8 @@ public class BookingDAOImpl implements BookingDAO {
 
     @Override
     public boolean createBooking(Booking booking) {
-        String query = "INSERT INTO booking (customerId, yardId, bookingDate, timeSlotId, totalPrice, bookingStatus) VALUES (?, ?, ?, ?, ?, ?)";
-        return executeUpdate(query, booking.getCustomerId(), booking.getYardId(), booking.getBookingDate(),
-                booking.getTimeSlotId(), booking.getTotalPrice(), booking.getBookingStatus());
+        String query = "INSERT INTO booking (customerId, yardId, bookingDate, totalPrice, bookingStatus) VALUES (?, ?, ?, ?, ?)";
+        return executeUpdate(query, booking.getCustomerId(), booking.getYardId(), booking.getBookingDate(), booking.getTotalPrice(), booking.getBookingStatus().name());
     }
 
     @Override
@@ -31,9 +31,8 @@ public class BookingDAOImpl implements BookingDAO {
 
     @Override
     public boolean updateBooking(Booking booking) {
-        String query = "UPDATE booking SET customerId = ?, yardId = ?, bookingDate = ?, timeSlotId = ?, totalPrice = ?, bookingStatus = ? WHERE bookingId = ?";
-        return executeUpdate(query, booking.getCustomerId(), booking.getYardId(), booking.getBookingDate(),
-                booking.getTimeSlotId(), booking.getTotalPrice(), booking.getBookingStatus(), booking.getBookingId());
+        String query = "UPDATE booking SET customerId = ?, yardId = ?, bookingDate = ?, totalPrice = ?, bookingStatus = ? WHERE bookingId = ?";
+        return executeUpdate(query, booking.getCustomerId(), booking.getYardId(), booking.getBookingDate(), booking.getTotalPrice(), booking.getBookingStatus().name(), booking.getBookingId());
     }
 
     @Override
@@ -61,9 +60,9 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
-    public List<Booking> getBookingsByStatus(String status) {
+    public List<Booking> getBookingsByStatus(BookingStatus status) {
         String query = "SELECT * FROM booking WHERE bookingStatus = ?";
-        return executeQuery(query, status);
+        return executeQuery(query, status.name()); // Convert the enum to a string for the query
     }
 
     // Generalized method for executing update queries (insert, update, delete)
@@ -109,9 +108,8 @@ public class BookingDAOImpl implements BookingDAO {
                 resultSet.getInt("customerId"),
                 resultSet.getInt("yardId"),
                 resultSet.getDate("bookingDate").toLocalDate(),
-                resultSet.getInt("timeSlotId"),
                 resultSet.getDouble("totalPrice"),
-                resultSet.getString("bookingStatus")
+                BookingStatus.valueOf(resultSet.getString("bookingStatus")) // Convert database string to enum
         );
     }
 

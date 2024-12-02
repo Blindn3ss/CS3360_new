@@ -7,17 +7,15 @@ public class Booking {
     private int customerId;
     private int yardId;
     private LocalDate bookingDate;
-    private int timeSlotId;
     private double totalPrice;
-    private String bookingStatus;
+    private BookingStatus bookingStatus; // Updated to use enum
 
     public Booking(int bookingId, int customerId, int yardId, LocalDate bookingDate,
-                   int timeSlotId, double totalPrice, String bookingStatus) {
+                   double totalPrice, BookingStatus bookingStatus) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.yardId = yardId;
         this.bookingDate = bookingDate;
-        this.timeSlotId = timeSlotId;
         this.totalPrice = totalPrice;
         this.bookingStatus = bookingStatus;
     }
@@ -34,8 +32,8 @@ public class Booking {
         return customerId;
     }
 
-    public void setCustomerId(int userId) {
-        this.customerId = userId;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public int getYardId() {
@@ -54,14 +52,6 @@ public class Booking {
         this.bookingDate = bookingDate;
     }
 
-    public int getTimeSlotId() {
-        return timeSlotId;
-    }
-
-    public void setTimeSlotId(int timeSlotId) {
-        this.timeSlotId = timeSlotId;
-    }
-
     public double getTotalPrice() {
         return totalPrice;
     }
@@ -70,22 +60,21 @@ public class Booking {
         this.totalPrice = totalPrice;
     }
 
-    public String getBookingStatus() {
+    public BookingStatus getBookingStatus() { // Updated getter
         return bookingStatus;
     }
 
-    public void setBookingStatus(String bookingStatus) {
+    public void setBookingStatus(BookingStatus bookingStatus) { // Updated setter
         this.bookingStatus = bookingStatus;
     }
 
-    // Method to display booking details
     public String displayBookingInfo() {
         return "Booking ID: " + bookingId + "\n" +
                 "User ID: " + customerId + "\n" +
                 "Yard ID: " + yardId + "\n" +
                 "Booking Date: " + bookingDate + "\n" +
-                "Time Slot ID: " + timeSlotId + "\n" +
                 "Total Price: $" + totalPrice + "\n" +
-                "Booking Status: " + bookingStatus;
+                "Booking Status: " + bookingStatus; // Will display as the name of the enum
     }
 }
+

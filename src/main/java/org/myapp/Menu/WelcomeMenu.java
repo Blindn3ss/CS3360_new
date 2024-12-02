@@ -9,6 +9,9 @@ import org.myapp.Model.Manager;
 import java.sql.*;
 import java.util.Scanner;
 
+import static org.myapp.Menu.Utility.doesUsernameExist;
+import static org.myapp.Menu.Utility.isValidEmail;
+
 
 public class WelcomeMenu {
     private final Scanner scanner;
@@ -54,6 +57,7 @@ public class WelcomeMenu {
             if (manager != null){
                 if (manager.getPassword().equals(password)) {
                     System.out.println("Welcome Manager");
+                    new ManagerMenu(manager, scanner).execute();
                 }
                 else{
                     System.out.println("Invalid username or password");
@@ -87,6 +91,10 @@ public class WelcomeMenu {
         String phoneNumber = scanner.nextLine();
         System.out.print("Enter email: ");
         String email = scanner.nextLine();
+        while (!isValidEmail(email)){
+            System.out.println("Email is not valid");
+            email = scanner.nextLine();
+        }
         System.out.println("Type secret key for manager, ");
         System.out.println("Leave blank for customer,");
         System.out.print("Or -1 to cancel sign up: ");
@@ -110,37 +118,6 @@ public class WelcomeMenu {
         }
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
-    public boolean doesUsernameExist(String username) throws SQLException {
-        String query =
-                "SELECT COUNT(*) FROM customer WHERE username = ? " +
-                        "UNION " +
-                        "SELECT COUNT(*) FROM manager WHERE username = ?";
-
-        Connection conn = new Database().connect();
-        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, username);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                int count = 0;
-
-                // Iterate over the result set to sum counts from both tables
-                while (resultSet.next()) {
-                    count += resultSet.getInt(1);
-                }
-
-                // If the count is greater than 0, the username exists in either of the tables
-                return count > 0;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        conn.close();
-        return false;
-    }
 
     private void exitApp() {
         System.out.println("Goodbye!");

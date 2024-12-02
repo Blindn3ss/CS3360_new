@@ -1,7 +1,7 @@
 package org.myapp.DAO;
 
 import org.myapp.Model.Booking;
-
+import org.myapp.Model.BookingStatus;
 import java.util.List;
 
 public interface BookingDAO {
@@ -12,6 +12,7 @@ public interface BookingDAO {
     List<Booking> getAllBookings();
     List<Booking> getBookingsByCustomerId(int customerId);
     List<Booking> getBookingsByYardId(int yardId);
-    List<Booking> getBookingsByStatus(String status);
+    List<Booking> getBookingsByStatus(BookingStatus status); // Updated to use BookingStatus enum
 }
+
 

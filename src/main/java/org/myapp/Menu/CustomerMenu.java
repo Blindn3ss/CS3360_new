@@ -9,8 +9,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static org.myapp.Menu.Utility.isValidEmail;
 
 public class CustomerMenu {
     Scanner scanner;
@@ -215,12 +215,5 @@ public class CustomerMenu {
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Back", ()->{}));
 
         viewYardsWithFilter.execute();
-    }
-
-    private static boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 }
