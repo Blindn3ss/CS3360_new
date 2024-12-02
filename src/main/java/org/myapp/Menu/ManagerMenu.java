@@ -13,4 +13,6 @@ public class ManagerMenu {
         this.loggedInManager = manager;
         this.scanner = scanner;
     }
+
+
 }
