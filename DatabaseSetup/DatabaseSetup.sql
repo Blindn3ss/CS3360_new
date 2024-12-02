@@ -127,20 +127,21 @@ CREATE TABLE `cs3360`.`yard` (
 
 CREATE TABLE booking (
     bookingId INT AUTO_INCREMENT PRIMARY KEY,
-    yardId INT UNSIGNED NOT NULL,
-    customerId INT UNSIGNED NOT NULL,
+    yardId INT  NULL,
+    customerId INT  NULL,
     bookingDate DATE NOT NULL,
     bookingPrice DOUBLE NOT NULL,
     bookingStatus ENUM('PENDING', 'CANCEL', 'CONFIRMED', 'COMPLETED') NOT NULL,
     CONSTRAINT fk_booking_yard
         FOREIGN KEY (yardId) REFERENCES yard(yardId)
         ON UPDATE CASCADE
-        ON DELETE CASCADE,
+        ON DELETE SET NULL,
     CONSTRAINT fk_booking_customer
         FOREIGN KEY (customerId) REFERENCES customer(customerId)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE SET NULL
 );
+
 
 CREATE TABLE permission (
     managerId INT NOT NULL,
