@@ -87,9 +87,6 @@ public class WelcomeMenu {
         String phoneNumber = scanner.nextLine();
         System.out.print("Enter email: ");
         String email = scanner.nextLine();
-        while (!isValidEmail(email)){
-
-        }
         System.out.println("Type secret key for manager, ");
         System.out.println("Leave blank for customer,");
         System.out.print("Or -1 to cancel sign up: ");
