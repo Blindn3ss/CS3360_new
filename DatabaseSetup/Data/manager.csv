@@ -1,0 +1,6 @@
+managerId,username,password,fullName,phoneNumber,email
+1,manager_1,pass1234,John Manager,555-0001,john.manager@email.com
+2,manager_2,password2,Sarah Manager,555-0002,sarah.manager@email.com
+3,manager_3,mypassword,Michael Manager,555-0003,michael.manager@email.com
+4,manager_4,adminpass,Alice Manager,555-0004,alice.manager@email.com
+5,manager_5,secure123,Bob Manager,555-0005,bob.manager@email.com
