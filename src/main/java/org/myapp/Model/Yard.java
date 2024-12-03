@@ -6,16 +6,16 @@ public class Yard {
     private String yardLocation;
     private int yardCapacity;
     private String surfaceType;
-    private double pricePerTimeSlot;
+    private double pricePerDay;
     private String description;
 
-    public Yard(int yardId, String yardName, String yardLocation, int yardCapacity, String surfaceType, double pricePerTimeSlot, String description) {
+    public Yard(int yardId, String yardName, String yardLocation, int yardCapacity, String surfaceType, double pricePerDay, String description) {
         this.yardId = yardId;
         this.yardName = yardName;
         this.yardLocation = yardLocation;
         this.yardCapacity = yardCapacity;
         this.surfaceType = surfaceType;
-        this.pricePerTimeSlot = pricePerTimeSlot;
+        this.pricePerDay = pricePerDay;
         this.description = description;
     }
 
@@ -52,12 +52,20 @@ public class Yard {
         this.yardCapacity = yardCapacity;
     }
 
-    public double getPricePerTimeSlot() {
-        return pricePerTimeSlot;
+    public String getSurfaceType() {
+        return surfaceType;
     }
 
-    public void setPricePerTimeSlot(double pricePerTimeSlot) {
-        this.pricePerTimeSlot = pricePerTimeSlot;
+    public void setSurfaceType(String surfaceType) {
+        this.surfaceType = surfaceType;
+    }
+
+    public double getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(double pricePerDay) {
+        this.pricePerDay = pricePerDay;
     }
 
     public String getDescription() {
@@ -68,28 +76,21 @@ public class Yard {
         this.description = description;
     }
 
-    public String displayYardInfo() {
+    public String yardInfo() {
         return String.format(
                 "+----------------------+--------------------------------------------+\n" +
                 "  Yard ID:             | %-40s \n" +
                 "  Name:                | %-40s \n" +
                 "  Location:            | %-40s \n" +
                 "  Capacity:            | %-40d \n" +
-                "  Price per Time Slot: | $%-39.2f \n" +
+                "  Surface Type:        | %-40s \n" +
+                "  Price per Day:       | $%-39.2f \n" +
                 "  Description:         | %-40s \n" +
                 "+----------------------+--------------------------------------------+",
-                yardId, yardName, yardLocation, yardCapacity, pricePerTimeSlot, description
+                yardId, yardName, yardLocation, yardCapacity, surfaceType, pricePerDay, description
         );
     }
 
-
-    public String getSurfaceType() {
-        return surfaceType;
-    }
-
-    public void setSurfaceType(String surfaceType) {
-        this.surfaceType = surfaceType;
-    }
 }
 
 

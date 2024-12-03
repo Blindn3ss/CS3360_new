@@ -7,16 +7,16 @@ public class Booking {
     private int customerId;
     private int yardId;
     private LocalDate bookingDate;
-    private double totalPrice;
+    private double bookingPrice;
     private BookingStatus bookingStatus; // Updated to use enum
 
     public Booking(int bookingId, int customerId, int yardId, LocalDate bookingDate,
-                   double totalPrice, BookingStatus bookingStatus) {
+                   double bookingPrice, BookingStatus bookingStatus) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.yardId = yardId;
         this.bookingDate = bookingDate;
-        this.totalPrice = totalPrice;
+        this.bookingPrice = bookingPrice;
         this.bookingStatus = bookingStatus;
     }
 
@@ -52,12 +52,12 @@ public class Booking {
         this.bookingDate = bookingDate;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
+    public double getBookingPrice() {
+        return bookingPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setBookingPrice(double bookingPrice) {
+        this.bookingPrice = bookingPrice;
     }
 
     public BookingStatus getBookingStatus() { // Updated getter
@@ -68,13 +68,23 @@ public class Booking {
         this.bookingStatus = bookingStatus;
     }
 
+    public String viewBooking() {
+            return String.format("Booking #%d | Yard ID: %d | Date: %s | Status: %s | Total: $%.2f",
+                    bookingId,
+                    customerId,
+                    bookingDate.toString(),
+                    bookingStatus.name(),
+                    bookingPrice);
+    }
+
     public String displayBookingInfo() {
-        return "Booking ID: " + bookingId + "\n" +
+        return  "Booking Info\n"+
+                "-----------------------------------\n"+
                 "User ID: " + customerId + "\n" +
                 "Yard ID: " + yardId + "\n" +
                 "Booking Date: " + bookingDate + "\n" +
-                "Total Price: $" + totalPrice + "\n" +
-                "Booking Status: " + bookingStatus; // Will display as the name of the enum
+                "Total Price: $" + bookingPrice + "\n" +
+                "Booking Status: " + bookingStatus;
     }
 }
 

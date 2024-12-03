@@ -29,25 +29,6 @@ INSERT INTO manager (username, password, fullName, phoneNumber, email) VALUES ('
 
 
 -- Create Yard
-CREATE TABLE yard (
-    yardId INT AUTO_INCREMENT PRIMARY KEY,
-    yardName VARCHAR(255) NOT NULL,
-    yardLocation VARCHAR(255) NOT NULL,
-    yardCapacity INT NOT NULL,
-    pricePerTimeSlot DOUBLE NOT NULL,  -- Price per time slot to rent the yard
-    description TEXT
-);
-
--- gui workbench
-
-CREATE TABLE `cs3360`.`yard` (
-  `yardId` INT NOT NULL AUTO_INCREMENT,
-  `yardName` VARCHAR(255) NOT NULL,
-  `yardLocation` VARCHAR(255) NOT NULL,
-  `yardCapacity` INT NOT NULL,
-  `pricePerTimeSlot` DOUBLE NOT NULL,
-  `description` TEXT(65535) NULL,
-  PRIMARY KEY (`yardId`));
 
 ALTER TABLE `cs3360`.`yard`
 ADD COLUMN `surfaceType` VARCHAR(90) NULL AFTER `yardCapacity`;
@@ -59,7 +40,7 @@ CREATE TABLE `cs3360`.`yard` (
   `yardLocation` VARCHAR(255) NOT NULL,
   `yardCapacity` INT NOT NULL,
   `surfaceType` VARCHAR(90) NULL,  -- Type of surface (e.g., grass, turf, indoor)
-  `pricePerTimeSlot` DOUBLE NOT NULL,
+  `pricePerDay` DOUBLE NOT NULL,
   `description` TEXT(65535) NULL,
   PRIMARY KEY (`yardId`)
 );
@@ -156,6 +137,34 @@ CREATE TABLE permission (
         ON DELETE CASCADE,
     PRIMARY KEY (managerId, yardId)
 );
+
+DELIMITER //
+
+CREATE EVENT updateConfirmedAndPendingBookingsEvent
+ON SCHEDULE EVERY 3 HOUR
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    -- Update bookings with status 'CONFIRMED' to 'COMPLETED' if the booking date is before the current date
+    UPDATE booking
+    SET bookingStatus = 'COMPLETED'
+    WHERE bookingDate < CURRENT_DATE
+      AND bookingStatus = 'CONFIRMED';
+
+    -- Update bookings with status 'PENDING' to 'CANCEL' if the booking date is before the current date
+    UPDATE booking
+    SET bookingStatus = 'CANCEL'
+    WHERE bookingDate < CURRENT_DATE
+      AND bookingStatus = 'PENDING';
+END //
+
+DELIMITER ;
+
+SHOW EVENTS;
+
+DROP EVENT updateConfirmedAndPendingBookingsEvent;
+
+-- Note change the field column of yard table from 'pricePerTimeSlot' to 'pricePerDay'
 
 
 

@@ -9,7 +9,7 @@ import static org.myapp.Menu.Utility.isValidEmail;
 
 public class ManagerMenu {
     Scanner scanner;
-    private Manager loggedInManager;
+    private final Manager loggedInManager;
 
     public ManagerMenu(Manager manager, Scanner scanner) {
         this.loggedInManager = manager;
@@ -49,7 +49,7 @@ public class ManagerMenu {
     }
 
     private void viewProfile() {
-
+        loggedInManager.viewProfileDetails();
     }
 
 }

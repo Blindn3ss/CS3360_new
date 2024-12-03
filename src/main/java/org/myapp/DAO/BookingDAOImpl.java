@@ -5,22 +5,30 @@ import org.myapp.Model.BookingStatus;
 import org.myapp.Database.Database;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class BookingDAOImpl implements BookingDAO {
     private final Connection connection;
+    private static BookingDAOImpl instance;
 
     public BookingDAOImpl() {
         Database db = new Database();
         connection = db.connect();
     }
 
+    public static BookingDAOImpl getInstance(){
+        if (instance == null) {
+            instance = new BookingDAOImpl();
+        }
+        return instance;
+    }
     @Override
     public boolean createBooking(Booking booking) {
-        String query = "INSERT INTO booking (customerId, yardId, bookingDate, totalPrice, bookingStatus) VALUES (?, ?, ?, ?, ?)";
-        return executeUpdate(query, booking.getCustomerId(), booking.getYardId(), booking.getBookingDate(), booking.getTotalPrice(), booking.getBookingStatus().name());
+        String query = "INSERT INTO booking (customerId, yardId, bookingDate, bookingPrice, bookingStatus) VALUES (?, ?, ?, ?, ?)";
+        return executeUpdate(query, booking.getCustomerId(), booking.getYardId(), booking.getBookingDate(), booking.getBookingPrice(), booking.getBookingStatus().name());
     }
 
     @Override
@@ -31,8 +39,19 @@ public class BookingDAOImpl implements BookingDAO {
 
     @Override
     public boolean updateBooking(Booking booking) {
-        String query = "UPDATE booking SET customerId = ?, yardId = ?, bookingDate = ?, totalPrice = ?, bookingStatus = ? WHERE bookingId = ?";
-        return executeUpdate(query, booking.getCustomerId(), booking.getYardId(), booking.getBookingDate(), booking.getTotalPrice(), booking.getBookingStatus().name(), booking.getBookingId());
+        String query = "UPDATE booking SET customerId = ?, yardId = ?, bookingDate = ?, bookingPrice = ?, bookingStatus = ? WHERE bookingId = ?";
+        return executeUpdate(query, booking.getCustomerId(),
+                                    booking.getYardId(),
+                                    booking.getBookingDate(),
+                                    booking.getBookingPrice(),
+                                    booking.getBookingStatus().name(),
+                                    booking.getBookingId());
+    }
+
+    public boolean updateBookingStatusWithId(int bookingId, BookingStatus status) {
+        String query = "UPDATE booking SET bookingStatus = ? WHERE bookingId = ?";
+        return executeUpdate(query, status.name(),
+                                    bookingId);
     }
 
     @Override
@@ -59,10 +78,44 @@ public class BookingDAOImpl implements BookingDAO {
         return executeQuery(query, yardId);
     }
 
+    public Booking getBookedYardByDate(int yardId, LocalDate date) {
+        String query = "SELECT * FROM booking WHERE yardId = ? AND bookingDate = ? AND bookingStatus = 'CONFIRMED'";
+        return executeQuery(query, yardId, Date.valueOf(date)).stream().findFirst().orElse(null);
+    }
+
     @Override
     public List<Booking> getBookingsByStatus(BookingStatus status) {
         String query = "SELECT * FROM booking WHERE bookingStatus = ?";
-        return executeQuery(query, status.name()); // Convert the enum to a string for the query
+        return executeQuery(query, status.name());
+    }
+
+    public List<Booking> getBookingsByCustomerIdAndStatus(int customerId, BookingStatus status){
+        String query = "SELECT * FROM booking WHERE customerId = ? AND bookingStatus = ?";
+        return executeQuery(query, customerId, status.name());
+
+    }
+
+    public boolean isBookingValidToCanCel(int bookingId, int customerId) {
+        String query = "SELECT EXISTS (" +
+                "SELECT 1 " +
+                "FROM booking " +
+                "WHERE bookingId = ? " +
+                "AND customerId = ? " +
+                "AND bookingStatus IN ('PENDING', 'CONFIRMED')" +
+                ")";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            setQueryParameters(preparedStatement, bookingId, customerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getBoolean(1);
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // Generalized method for executing update queries (insert, update, delete)
@@ -108,12 +161,11 @@ public class BookingDAOImpl implements BookingDAO {
                 resultSet.getInt("customerId"),
                 resultSet.getInt("yardId"),
                 resultSet.getDate("bookingDate").toLocalDate(),
-                resultSet.getDouble("totalPrice"),
+                resultSet.getDouble("bookingPrice"),
                 BookingStatus.valueOf(resultSet.getString("bookingStatus")) // Convert database string to enum
         );
     }
 
-    // Close the database connection when done
     public void closeConnection() {
         try {
             if (connection != null) {

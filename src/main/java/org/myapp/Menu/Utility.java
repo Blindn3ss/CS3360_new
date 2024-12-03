@@ -1,11 +1,15 @@
 package org.myapp.Menu;
 
+import org.myapp.DAO.BookingDAOImpl;
 import org.myapp.Database.Database;
+import org.myapp.Model.Booking;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,5 +51,23 @@ public class Utility {
         }
         conn.close();
         return false;
+    }
+
+    public static boolean isValidDateFormat(String dateStr) {
+        try {
+            LocalDate date = LocalDate.parse(dateStr);
+            return true;  // Valid date format
+        } catch (DateTimeParseException e) {
+            return false;  // Invalid date format
+        }
+    }
+
+    public static boolean isBeforeCurrentDate(LocalDate date) {
+        LocalDate currentDate = LocalDate.now();
+        return date.isBefore(currentDate);
+    }
+
+    public static boolean bookingExist(int yardId, LocalDate date){
+        return BookingDAOImpl.getInstance().getBookedYardByDate(yardId, date) != null;
     }
 }

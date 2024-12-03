@@ -26,12 +26,12 @@ public class YardDAOImpl implements YardDAO {
 
     @Override
     public boolean createYard(Yard yard) {
-        String query = "INSERT INTO yard (yardName, yardLocation, yardCapacity, surfaceType, pricePerTimeSlot, description) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO yard (yardName, yardLocation, yardCapacity, surfaceType, pricePerDay, description) VALUES (?, ?, ?, ?, ?, ?)";
         return executeUpdate(query, yard.getYardName(),
                                     yard.getYardLocation(),
                                     yard.getYardCapacity(),
                                     yard.getSurfaceType(),
-                                    yard.getPricePerTimeSlot(),
+                                    yard.getPricePerDay(),
                                     yard.getDescription());
     }
 
@@ -43,12 +43,12 @@ public class YardDAOImpl implements YardDAO {
 
     @Override
     public boolean updateYard(Yard yard) {
-        String query = "UPDATE yard SET yardName = ?, yardLocation = ?, yardCapacity = ?, surfaceType = ?, pricePerTimeSlot = ?, description = ? WHERE yardId = ?";
+        String query = "UPDATE yard SET yardName = ?, yardLocation = ?, yardCapacity = ?, surfaceType = ?, pricePerDay = ?, description = ? WHERE yardId = ?";
         return executeUpdate(query, yard.getYardName(),
                                     yard.getYardLocation(),
                                     yard.getYardCapacity(),
                                     yard.getSurfaceType(),
-                                    yard.getPricePerTimeSlot(),
+                                    yard.getPricePerDay(),
                                     yard.getDescription(),
                                     yard.getYardId());
     }
@@ -88,11 +88,11 @@ public class YardDAOImpl implements YardDAO {
             parameters.add(surfaceType);
         }
         if (minPrice != null) {
-            sql.append(" AND pricePerTimeSlot >= ?");
+            sql.append(" AND pricePerDay >= ?");
             parameters.add(minPrice);
         }
         if (maxPrice != null) {
-            sql.append(" AND pricePerTimeSlot <= ?");
+            sql.append(" AND pricePerDay <= ?");
             parameters.add(maxPrice);
         }
 
@@ -143,7 +143,7 @@ public class YardDAOImpl implements YardDAO {
                 resultSet.getString("yardLocation"),
                 resultSet.getInt("yardCapacity"),
                 resultSet.getString("surfaceType"),
-                resultSet.getDouble("pricePerTimeSlot"),
+                resultSet.getDouble("pricePerDay"),
                 resultSet.getString("description")
         );
     }
