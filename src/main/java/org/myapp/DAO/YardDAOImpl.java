@@ -9,7 +9,7 @@ import java.util.List;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class YardDAOImpl implements YardDAO {
-    private final Connection connection;
+    private static Connection connection;
     private static YardDAOImpl instance;
 
     public YardDAOImpl() {
@@ -146,17 +146,6 @@ public class YardDAOImpl implements YardDAO {
                 resultSet.getDouble("pricePerDay"),
                 resultSet.getString("description")
         );
-    }
-
-    // Close the database connection when done
-    public void closeConnection() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
 

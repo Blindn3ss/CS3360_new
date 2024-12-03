@@ -26,7 +26,6 @@ public class CustomerMenu {
     }
 
     public void execute() {
-
         //Lv.3
 
         // Lv.2
@@ -37,7 +36,7 @@ public class CustomerMenu {
 
 
         SubMenu yardBookingSection = new SubMenu("Yards And Bookings");
-        yardBookingSection.addMenuItem(new ActionMenuItem("View All Yards", () -> {}));
+        yardBookingSection.addMenuItem(new ActionMenuItem("Guide", () -> {}));
         yardBookingSection.addMenuItem(new ActionMenuItem("View Yards With Filter", this::viewYardsWithFilter));
         yardBookingSection.addMenuItem(new ActionMenuItem("Book Now", this::bookNow));
         yardBookingSection.addMenuItem(new ActionMenuItem("View Current Booking", this::viewCurrentBooking));
@@ -75,32 +74,51 @@ public class CustomerMenu {
     }
 
     private void viewBookingHistory() {
-        List<Booking> pendingBookings;
-        pendingBookings = BookingDAOImpl.getInstance()
+        System.out.println("\nBOOKING HISTORY");
+        System.out.println("-----------------------------------------------------");
+        List<Booking> completedBooking;
+        completedBooking = BookingDAOImpl.getInstance()
                 .getBookingsByCustomerIdAndStatus(  loggedInCustomer.getCustomerId(),
                         BookingStatus.COMPLETED);
-        for (Booking booking : pendingBookings){
-            System.out.println(booking.viewBooking());
+        if (completedBooking.isEmpty()){
+            System.out.println("You have no completed booking");
+        }
+        else{
+            for (Booking booking : completedBooking){
+                System.out.println(booking.viewBooking());
+            }
         }
     }
 
     private void viewCurrentBooking() {
         System.out.println("\nPENDING");
+        System.out.println("-----------------------------------------------------");
         List<Booking> pendingBookings;
         pendingBookings = BookingDAOImpl.getInstance()
-                                        .getBookingsByCustomerIdAndStatus(loggedInCustomer.getCustomerId(),
-                                                                            BookingStatus.PENDING);
-        for (Booking booking : pendingBookings){
-            System.out.println(booking.viewBooking());
+                                        .getBookingsByCustomerIdAndStatus(loggedInCustomer.getCustomerId(), BookingStatus.PENDING);
+        if(pendingBookings.isEmpty()){
+            System.out.println("You have no pending booking.");
+        }
+        else{
+            for (Booking booking : pendingBookings){
+                System.out.println(booking.viewBooking());
+            }
         }
 
+
         System.out.println("\nCONFIRMED");
+        System.out.println("-----------------------------------------------------");
         List<Booking> confirmedBookings;
         confirmedBookings = BookingDAOImpl.getInstance()
                                           .getBookingsByCustomerIdAndStatus(loggedInCustomer.getCustomerId(),
                                                                             BookingStatus.CONFIRMED);
-        for (Booking booking : confirmedBookings) {
-            System.out.println(booking.viewBooking());
+        if(confirmedBookings.isEmpty()){
+            System.out.println("You have no confirmed booking.");
+        }
+        else{
+            for (Booking booking : confirmedBookings){
+                System.out.println(booking.viewBooking());
+            }
         }
         System.out.println();
     }
@@ -121,16 +139,25 @@ public class CustomerMenu {
 
         System.out.println("Enter the date (YYYY--MM-DD): ");
         String input;
-        while (date == null || isBeforeCurrentDate(date)){
+        while (date == null || isInvalidDateForBooking(date)) {
             input = scanner.nextLine().trim();
-            while (!isValidDateFormat(input)){
+            while (!Utility.isValidDateFormat(input)) {
                 System.out.println("Invalid date format. Try again");
                 input = scanner.nextLine().trim();
             }
             date = LocalDate.parse(input);
-            if (isBeforeCurrentDate(date)){
-                System.out.println("Can not enter a date from past!");
-                System.out.println("Try again.");
+
+            if (isInvalidDateForBooking(date)) {
+                String today = LocalDate.now().toString();
+                String latestAllowedDate = latestAlowedDate.toString();
+
+                System.out.println("+--------------------------- Rule! -------------------------------+");
+                System.out.println("| 1. You can not enter a date from the past!                      |");
+                System.out.println("| 2. Booking date must be at most 14 days after the current date! |");
+                System.out.printf( "|    Today: %-53s |%n", today);
+                System.out.printf( "|    The latest day you can enter is: %-27s |%n", latestAllowedDate);
+                System.out.println( "+-----------------------------------------------------------------+");
+                System.out.println( "Please try again.");
             }
         }
 
@@ -171,7 +198,6 @@ public class CustomerMenu {
                 System.out.println("Invalid input. Please enter 'Y' for Yes or 'N' for No.");
             }
         }
-
     }
 
     private void viewProfile() {
@@ -238,12 +264,11 @@ public class CustomerMenu {
             }
         }));
         editProfile.addMenuItem(new ActionMenuItem("Back", ()->{}));
-
         editProfile.execute();
-
     }
 
     private void viewYardsWithFilter() {
+        // Note: This functon will build as a SubMenu
         // Because we are using Runnable and run() so the variable are not thread-safe when changing in
         // these lambda expression.
         AtomicReference<String> location = new AtomicReference<>();
@@ -254,7 +279,8 @@ public class CustomerMenu {
         AtomicReference<String> surfaceType = new AtomicReference<>();
 
         // The view with filter is a menu getting options from user
-        SubMenu viewYardsWithFilter = new SubMenu("Filter Yards");
+        SubMenu viewYardsWithFilter = new SubMenu("viewYardWithFilter");
+
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Current Filter", ()->{
             System.out.println("\n--- Current Filters ---");
             System.out.println("Location: " + (location.get() != null ? location : "None"));
@@ -265,15 +291,17 @@ public class CustomerMenu {
             System.out.println("Surface Type: " + (surfaceType.get() != null ? surfaceType : "None"));
             System.out.println("------------------------");
         }));
+
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Add Location", () -> {
             System.out.print("Enter location: ");
             location.set(scanner.nextLine());
         }));
+
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Add Capacity", () -> {
             try {
                 System.out.print("Enter minimum capacity: ");
                 minCapacity.set(scanner.nextInt());
-                scanner.nextLine();  // Consume the newline character
+                scanner.nextLine();
 
                 System.out.print("Enter maximum capacity (or press Enter to skip): ");
                 String maxCapacityInput = scanner.nextLine().trim();
@@ -287,6 +315,7 @@ public class CustomerMenu {
                 scanner.nextLine();  // Clear the invalid input
             }
         }));
+
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Add Price Range", () -> {
             try {
                 System.out.print("Enter minimum price (or press Enter to skip): ");
@@ -304,10 +333,12 @@ public class CustomerMenu {
                 System.out.println("Invalid price input. Please enter valid numbers.");
             }
         }));
+
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Add Surface Type", () -> {
             System.out.print("Enter surface type (or press Enter to skip): ");
             surfaceType.set(scanner.nextLine());
         }));
+
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("View Result", () -> {
             List<Yard> filteredYards = YardDAOImpl.getInstance().getYardsWithFilter(minCapacity.get(),
                                                                                     maxCapacity.get(),
@@ -324,6 +355,7 @@ public class CustomerMenu {
                 }
             }
         }));
+
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Clear", () -> {
             location.set(null);
             minCapacity.set(null);
@@ -334,6 +366,7 @@ public class CustomerMenu {
 
             System.out.println("Filters cleared.");
         }));
+
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Book Now", this::bookNow));
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Back", ()->{}));
 

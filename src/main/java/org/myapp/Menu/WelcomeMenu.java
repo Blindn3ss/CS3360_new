@@ -2,7 +2,6 @@ package org.myapp.Menu;
 
 import org.myapp.DAO.CustomerDAOImpl;
 import org.myapp.DAO.ManagerDAOImpl;
-import org.myapp.Database.Database;
 import org.myapp.Model.Customer;
 import org.myapp.Model.Manager;
 
@@ -37,9 +36,9 @@ public class WelcomeMenu {
 
     private void logIn() {
         System.out.print("\nUsername: ");
-        String username = scanner.nextLine();
+        String username = scanner.nextLine().trim();
         System.out.print("Password: ");
-        String password = scanner.nextLine();
+        String password = scanner.nextLine().trim();
 
         Customer customer = CustomerDAOImpl.getInstance().getCustomerByUsername(username);
         if (customer != null){
@@ -52,8 +51,7 @@ public class WelcomeMenu {
             }
         }
         else{
-            ManagerDAOImpl managerDAO = new ManagerDAOImpl();
-            Manager manager = managerDAO.getManagerByUserName(username);
+            Manager manager = ManagerDAOImpl.getInstance().getManagerByUserName(username);
             if (manager != null){
                 if (manager.getPassword().equals(password)) {
                     System.out.println("Welcome Manager");
@@ -77,31 +75,31 @@ public class WelcomeMenu {
         String key;
         String secretKey = "addMoreManager";
         System.out.print("\nEnter username: ");
-        String username = scanner.nextLine();
+        String username = scanner.nextLine().trim();
         if (doesUsernameExist(username)) {
             System.out.println("Username already exists.");
             return;
         }
 
         System.out.print("Enter password: ");
-        String password = scanner.nextLine();
+        String password = scanner.nextLine().trim();
         System.out.print("Enter full name: ");
-        String fullName = scanner.nextLine();
+        String fullName = scanner.nextLine().trim();
         System.out.print("Enter phone number: ");
-        String phoneNumber = scanner.nextLine();
+        String phoneNumber = scanner.nextLine().trim();
         System.out.print("Enter email: ");
-        String email = scanner.nextLine();
+        String email = scanner.nextLine().trim();
         while (!isValidEmail(email)){
             System.out.println("Email is not valid");
-            email = scanner.nextLine();
+            email = scanner.nextLine().trim();
         }
         System.out.println("Type secret key for manager, ");
         System.out.println("Leave blank for customer,");
         System.out.print("Or -1 to cancel sign up: ");
-        key = scanner.nextLine();
+        key = scanner.nextLine().trim();
         while (!key.equals(secretKey) && !key.isEmpty() && !key.equals("-1") ){
             System.out.println("Try again");
-            key = scanner.nextLine();
+            key = scanner.nextLine().trim();
         }
         if (key.isEmpty()){
             Customer customer = new Customer(-1, username, password, fullName, phoneNumber, email);

@@ -9,7 +9,7 @@ import java.util.List;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class ManagerDAOImpl implements ManagerDAO {
-    private final Connection connection;
+    private static Connection connection;
     private static ManagerDAOImpl instance;
 
     // Constructor to initialize database connection
@@ -117,17 +117,6 @@ public class ManagerDAOImpl implements ManagerDAO {
                 resultSet.getString("phoneNumber"),
                 resultSet.getString("email")
         );
-    }
-
-    // Close the database connection when done
-    public void closeConnection() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
 

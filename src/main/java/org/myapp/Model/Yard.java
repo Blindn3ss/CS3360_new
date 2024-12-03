@@ -1,5 +1,7 @@
 package org.myapp.Model;
 
+import static org.myapp.Menu.Utility.wrapText;
+
 public class Yard {
     private int yardId;
     private String yardName;
@@ -77,20 +79,31 @@ public class Yard {
     }
 
     public String yardInfo() {
-        return String.format(
-                "+----------------------+--------------------------------------------+\n" +
-                "  Yard ID:             | %-40s \n" +
-                "  Name:                | %-40s \n" +
-                "  Location:            | %-40s \n" +
-                "  Capacity:            | %-40d \n" +
-                "  Surface Type:        | %-40s \n" +
-                "  Price per Day:       | $%-39.2f \n" +
-                "  Description:         | %-40s \n" +
-                "+----------------------+--------------------------------------------+",
-                yardId, yardName, yardLocation, yardCapacity, surfaceType, pricePerDay, description
-        );
-    }
+        String wrappedDescription = wrapText(description, 60);
 
+        StringBuilder formattedInfo = new StringBuilder(String.format(
+                        "+----------------------+--------------------------------------------------------------+\n" +
+                        "| Yard ID:             | %-60s |\n" +
+                        "| Name:                | %-60s |\n" +
+                        "| Location:            | %-60s |\n" +
+                        "| Capacity:            | %-60d |\n" +
+                        "| Surface Type:        | %-60s |\n" +
+                        "| Price per Day:       | $%-59.2f |\n",
+                yardId, yardName, yardLocation, yardCapacity, surfaceType, pricePerDay
+        ));
+
+        String[] descriptionLines = wrappedDescription.split("\n");
+        for (int i = 0; i < descriptionLines.length; i++) {
+            if (i == 0){
+                formattedInfo.append(String.format("| Description:         | %-60s |\n", descriptionLines[i]));
+            }
+            else
+                formattedInfo.append(String.format("|                      | %-60s |\n", descriptionLines[i]));
+        }
+        formattedInfo.append("+----------------------+--------------------------------------------------------------+");
+
+        return formattedInfo.toString();
+    }
 }
 
 

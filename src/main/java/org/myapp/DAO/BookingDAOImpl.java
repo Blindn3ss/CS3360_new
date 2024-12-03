@@ -11,7 +11,7 @@ import java.util.List;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class BookingDAOImpl implements BookingDAO {
-    private final Connection connection;
+    private static Connection connection;
     private static BookingDAOImpl instance;
 
     public BookingDAOImpl() {
@@ -164,16 +164,6 @@ public class BookingDAOImpl implements BookingDAO {
                 resultSet.getDouble("bookingPrice"),
                 BookingStatus.valueOf(resultSet.getString("bookingStatus")) // Convert database string to enum
         );
-    }
-
-    public void closeConnection() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
 

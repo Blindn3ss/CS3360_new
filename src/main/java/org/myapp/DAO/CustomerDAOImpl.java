@@ -9,7 +9,7 @@ import java.util.List;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class CustomerDAOImpl implements CustomerDAO {
-    private final Connection connection;
+    private static Connection connection;
     private static CustomerDAOImpl instance;
 
     public CustomerDAOImpl() {
@@ -127,16 +127,6 @@ public class CustomerDAOImpl implements CustomerDAO {
                 resultSet.getString("phoneNumber"),
                 resultSet.getString("email")
         );
-    }
-
-    public void closeConnection() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
 

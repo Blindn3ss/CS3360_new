@@ -79,7 +79,7 @@ public class Booking {
 
     public String displayBookingInfo() {
         return  "Booking Info\n"+
-                "-----------------------------------\n"+
+                "------------\n"+
                 "User ID: " + customerId + "\n" +
                 "Yard ID: " + yardId + "\n" +
                 "Booking Date: " + bookingDate + "\n" +

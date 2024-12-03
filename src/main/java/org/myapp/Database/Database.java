@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 public class Database {
     static Connection connection = null;
+    @SuppressWarnings("CallToPrintStackTrace")
     public Connection connect(){
         try {
             String url = "jdbc:mysql://127.0.0.1:3306/cs3360";
@@ -18,5 +19,15 @@ public class Database {
             e.printStackTrace();
         }
         return connection;
+    }
+
+    public void closeConnection(){
+        try{
+            if (connection != null){
+                connection.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
