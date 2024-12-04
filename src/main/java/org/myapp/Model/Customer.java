@@ -1,7 +1,6 @@
 package org.myapp.Model;
-public class Customer {
 
-    // Private fields
+public class Customer {
     private int customerId;
     private String username;
     private String password;
@@ -18,8 +17,6 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
-
-    // Getter and Setter methods for each attribute
 
     public int getCustomerId() {
         return customerId;

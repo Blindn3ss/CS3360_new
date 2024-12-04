@@ -22,13 +22,7 @@ public class WelcomeMenu {
     public void execute() {
         SubMenu welcomeMenu = new SubMenu("Welcome Menu");
         welcomeMenu.addMenuItem(new ActionMenuItem("Log In", this::logIn));
-        welcomeMenu.addMenuItem(new ActionMenuItem("Sign Up", () -> {
-            try {
-                signUp();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }));
+        welcomeMenu.addMenuItem(new ActionMenuItem("Sign Up", this::signUp));
         welcomeMenu.addMenuItem(new ActionMenuItem("Exit", this::exitApp));
 
         welcomeMenu.execute();
@@ -71,14 +65,18 @@ public class WelcomeMenu {
     }
 
 
-    private void signUp() throws SQLException {
+    private void signUp() {
         String key;
         String secretKey = "addMoreManager";
         System.out.print("\nEnter username: ");
         String username = scanner.nextLine().trim();
-        if (doesUsernameExist(username)) {
-            System.out.println("Username already exists.");
-            return;
+        try {
+            if (doesUsernameExist(username)) {
+                System.out.println("Username already exists.");
+                return;
+            }
+        }  catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
         System.out.print("Enter password: ");
@@ -103,19 +101,27 @@ public class WelcomeMenu {
         }
         if (key.isEmpty()){
             Customer customer = new Customer(-1, username, password, fullName, phoneNumber, email);
-            CustomerDAOImpl.getInstance().createCustomer(customer);
-            System.out.println("Customer account created successfully!");
+            if (CustomerDAOImpl.getInstance().createCustomer(customer)){
+                System.out.println("Customer account created successfully!");
+            }
+            else {
+                System.out.println("Something went wrong. Try again.");
+            }
+
         }
         else if (key.equals(secretKey)){
             Manager manager = new Manager(-1, username, password, fullName, phoneNumber, email);
-            ManagerDAOImpl.getInstance().createManager(manager);
-            System.out.println("Manager account created successfully!");
+            if (ManagerDAOImpl.getInstance().createManager(manager)){
+                System.out.println("Manager account created successfully!");
+            }
+            else {
+                System.out.println("Something went wrong. Try again.");
+            }
         }
         else{
             System.out.println("You just cancel sign up.");
         }
     }
-
 
     private void exitApp() {
         System.out.println("Goodbye!");

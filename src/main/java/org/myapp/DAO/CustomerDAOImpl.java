@@ -72,16 +72,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         return executeQuery(query);
     }
 
-    // Special method to get a customer by username and phone number
-    @Override
-    public Customer getCustomerByFullNameAndPhoneNumber(String fullName, String phoneNumber) {
-        String query = "SELECT * FROM customer WHERE fullName = ? AND phoneNumber = ?";
-        List<Customer> customers = executeQuery(query, fullName, phoneNumber);
-        return customers.isEmpty() ? null : customers.getFirst();  // Return the first match, or null if not found
-    }
-
     // Generalized method for executing update queries (insert, update, delete)
-    @Override
     public boolean executeUpdate(String query, Object... params) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             setQueryParameters(preparedStatement, params);
@@ -93,7 +84,6 @@ public class CustomerDAOImpl implements CustomerDAO {
         return false;
     }
 
-    @Override
     public List<Customer> executeQuery(String query, Object... params) {
         List<Customer> customers = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {

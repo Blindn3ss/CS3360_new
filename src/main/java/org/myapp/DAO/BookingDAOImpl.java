@@ -89,6 +89,7 @@ public class BookingDAOImpl implements BookingDAO {
         return executeQuery(query, status.name());
     }
 
+    @Override
     public List<Booking> getBookingsByCustomerIdAndStatus(int customerId, BookingStatus status){
         String query = "SELECT * FROM booking WHERE customerId = ? AND bookingStatus = ?";
         return executeQuery(query, customerId, status.name());

@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
-    static Connection connection = null;
+    private static Connection connection = null;
     @SuppressWarnings("CallToPrintStackTrace")
     public Connection connect(){
         try {
@@ -21,7 +21,7 @@ public class Database {
         return connection;
     }
 
-    public void closeConnection(){
+    public void disconnct(){
         try{
             if (connection != null){
                 connection.close();

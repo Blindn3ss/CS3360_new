@@ -12,7 +12,6 @@ public class ManagerDAOImpl implements ManagerDAO {
     private static Connection connection;
     private static ManagerDAOImpl instance;
 
-    // Constructor to initialize database connection
     public ManagerDAOImpl() {
         Database db = new Database();
         connection = db.connect();
