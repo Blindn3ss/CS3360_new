@@ -1,12 +1,5 @@
 package org.myapp.Menu;
 
-import org.myapp.DAO.BookingDAOImpl;
-import org.myapp.Database.Database;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
@@ -15,7 +8,7 @@ import java.util.regex.Pattern;
 public class Utility {
     public static LocalDate latestAlowedDate = LocalDate.now().plusDays(14);
 
-    public static boolean IsValidEmailFormat(String email) {
+    public static boolean isValidEmailFormat(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);

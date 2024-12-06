@@ -2,14 +2,12 @@ package org.myapp.Menu;
 
 import org.myapp.Model.Manager;
 
-import java.util.Scanner;
-
 
 public class ManagerMenu {
-    private final Manager loggedInManager;
+    private final ManagerMenuAction managerActions;
 
-    public ManagerMenu(Manager manager) {
-        this.loggedInManager = manager;
+    public ManagerMenu(Manager loggedInManager) {
+        this.managerActions = new ManagerMenuAction(loggedInManager);
     }
 
     public void execute() {
@@ -18,17 +16,17 @@ public class ManagerMenu {
 
         // Lv.2
         SubMenu profileMenu = new SubMenu("Profile");
-        profileMenu.addMenuItem(new ActionMenuItem("View Profile", this::viewProfile));
-        profileMenu.addMenuItem(new ActionMenuItem("Edit Profile", this::editProfile));
+        profileMenu.addMenuItem(new ActionMenuItem("View Profile", managerActions::viewProfile));
+        profileMenu.addMenuItem(new ActionMenuItem("Edit Profile", managerActions::editProfile));
         profileMenu.addMenuItem(new ActionMenuItem("Back", () -> {}));
 
 
         SubMenu managerSection = new SubMenu("Yards And Bookings");
-        managerSection.addMenuItem(new ActionMenuItem("Add new Yard", () -> {}));
-        managerSection.addMenuItem(new ActionMenuItem("Edit managed yards", ()-> {}));
-        managerSection.addMenuItem(new ActionMenuItem("Register to manage", ()->{}));
-        managerSection.addMenuItem(new ActionMenuItem("Schedule and Bookings", ()->{}));
-        managerSection.addMenuItem(new ActionMenuItem("Revenue", ()->{}));
+        managerSection.addMenuItem(new ActionMenuItem("Add new Yard", managerActions::addNewYard));
+        managerSection.addMenuItem(new ActionMenuItem("Edit managed yards", managerActions::editManagedYards));
+        managerSection.addMenuItem(new ActionMenuItem("Register to manage", managerActions::registerToManage));
+        managerSection.addMenuItem(new ActionMenuItem("Schedule and Bookings", managerActions::viewScheduleAndBookings));
+        managerSection.addMenuItem(new ActionMenuItem("Revenue", managerActions::viewRevenue));
         managerSection.addMenuItem(new ActionMenuItem("Back", () -> {}));
 
         //Lv1
@@ -39,13 +37,4 @@ public class ManagerMenu {
 
         managerManu.execute();
     }
-
-    private void editProfile() {
-
-    }
-
-    private void viewProfile() {
-        loggedInManager.viewProfileDetails();
-    }
-
 }

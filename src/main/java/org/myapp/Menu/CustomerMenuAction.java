@@ -1,6 +1,5 @@
 package org.myapp.Menu;
 
-import org.myapp.DAO.BookingDAOImpl;
 import org.myapp.DAO.YardDAOImpl;
 import org.myapp.Model.Booking;
 import org.myapp.Model.BookingStatus;
@@ -14,7 +13,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.myapp.Menu.Utility.*;
-import static org.myapp.Menu.Utility.IsValidEmailFormat;
+import static org.myapp.Menu.Utility.isValidEmailFormat;
 
 public class CustomerMenuAction {
     private final Customer loggedInCustomer;
@@ -198,7 +197,7 @@ public class CustomerMenuAction {
                 System.out.println("Your email should not be empty");
                 email = scanner.nextLine().trim();
             }
-            while(!IsValidEmailFormat(email)){
+            while(!isValidEmailFormat(email)){
                 System.out.println("Your email is invalid");
                 email = scanner.nextLine().trim();
             }
@@ -291,7 +290,7 @@ public class CustomerMenuAction {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input for capacity. Please enter valid integers.");
-                scanner.nextLine();  // Clear the invalid input
+                scanner.nextLine();
             }
         }));
 

@@ -1,5 +1,6 @@
 package org.myapp.Model;
 
+import org.myapp.DAO.CustomerDAOImpl;
 import org.myapp.DAO.ManagerDAOImpl;
 
 import java.util.List;
@@ -111,6 +112,10 @@ public class Manager {
     public boolean managerSignUp(String username, String password, String fullName, String phoneNumber, String email){
         Manager manager = new Manager(-1, username, password, fullName, phoneNumber, email);
         return ManagerDAOImpl.getInstance().createManager(manager);
+    }
+
+    public boolean updateProfile(Manager loggedInManager) {
+        return ManagerDAOImpl.getInstance().updateManager(loggedInManager);
     }
 }
 
