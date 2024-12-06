@@ -1,7 +1,7 @@
 package org.myapp.Menu;
 
 public class ActionMenuItem extends MenuItem {
-    private Runnable action;
+    private final Runnable action;
 
     public ActionMenuItem(String name, Runnable action) {
         super(name);

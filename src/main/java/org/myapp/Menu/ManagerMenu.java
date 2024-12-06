@@ -4,16 +4,12 @@ import org.myapp.Model.Manager;
 
 import java.util.Scanner;
 
-import static org.myapp.Menu.Utility.isValidEmail;
-
 
 public class ManagerMenu {
-    Scanner scanner;
     private final Manager loggedInManager;
 
-    public ManagerMenu(Manager manager, Scanner scanner) {
+    public ManagerMenu(Manager manager) {
         this.loggedInManager = manager;
-        this.scanner = scanner;
     }
 
     public void execute() {

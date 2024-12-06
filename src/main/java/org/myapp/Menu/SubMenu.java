@@ -67,7 +67,7 @@ public class SubMenu extends MenuItem {
                     return choice;
                 }
             } catch (NumberFormatException e) {
-                // Ignore invalid input
+                // Ignore input
             }
             System.out.println("Invalid choice. Please try again.");
         }

@@ -1,5 +1,7 @@
 package org.myapp.Model;
 
+import org.myapp.DAO.ManagerDAOImpl;
+
 import java.util.List;
 
 public class Manager {
@@ -9,6 +11,15 @@ public class Manager {
     private String fullName;
     private String phoneNumber;
     private String email;
+
+    public Manager(){
+        this.managerId = 0;
+        this.username = "";
+        this.password = "";
+        this.fullName = "";
+        this.phoneNumber = "";
+        this.email = "";
+    }
 
     public Manager(int managerId, String username, String password, String fullName, String phoneNumber, String email) {
         this.managerId = managerId;
@@ -81,6 +92,25 @@ public class Manager {
         return "Manager [managerId=" + managerId + ", username=" + username +
                 ", fullName=" + fullName + ", phoneNumber=" + phoneNumber +
                 ", email=" + email + "]";
+    }
+
+    public boolean managerIsExist(String username) {
+        Manager manager = ManagerDAOImpl.getInstance().getManagerByUserName(username);
+        return manager != null;
+    }
+
+    public boolean managerPasswordValid(String username, String password) {
+        Manager manager = ManagerDAOImpl.getInstance().getManagerByUserName(username);
+        return manager.getPassword().equals(password);
+    }
+
+    public Manager managerLogIn(String username){
+        return ManagerDAOImpl.getInstance().getManagerByUserName(username);
+    }
+
+    public boolean managerSignUp(String username, String password, String fullName, String phoneNumber, String email){
+        Manager manager = new Manager(-1, username, password, fullName, phoneNumber, email);
+        return ManagerDAOImpl.getInstance().createManager(manager);
     }
 }
 

@@ -1,5 +1,8 @@
 package org.myapp.Model;
 
+import org.myapp.DAO.YardDAOImpl;
+
+import java.util.List;
 import static org.myapp.Menu.Utility.wrapText;
 
 public class Yard {
@@ -10,6 +13,16 @@ public class Yard {
     private String surfaceType;
     private double pricePerDay;
     private String description;
+
+    public Yard() {
+        this.yardId = 0;
+        this.yardName = "";
+        this.yardLocation = "";
+        this.yardCapacity = 0;
+        this.surfaceType = "";
+        this.pricePerDay = 0;
+        this.description = "";
+    }
 
     public Yard(int yardId, String yardName, String yardLocation, int yardCapacity, String surfaceType, double pricePerDay, String description) {
         this.yardId = yardId;
@@ -103,6 +116,15 @@ public class Yard {
         formattedInfo.append("+----------------------+--------------------------------------------------------------+");
 
         return formattedInfo.toString();
+    }
+
+    public List<Yard> getYardsWithFilter(Integer minCapacity,
+                                         Integer maxCapacity,
+                                         String location,
+                                         String surfaceType,
+                                         Double minPrice,
+                                         Double maxPrice){
+        return YardDAOImpl.getInstance().getYardsWithFilter(minCapacity, maxCapacity, location, surfaceType, minPrice, maxPrice );
     }
 }
 

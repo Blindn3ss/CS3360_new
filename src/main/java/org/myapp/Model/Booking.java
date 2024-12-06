@@ -1,5 +1,7 @@
 package org.myapp.Model;
 
+import org.myapp.DAO.BookingDAOImpl;
+
 import java.time.LocalDate;
 
 public class Booking {
@@ -9,6 +11,15 @@ public class Booking {
     private LocalDate bookingDate;
     private double bookingPrice;
     private BookingStatus bookingStatus; // Updated to use enum
+
+    public Booking (){
+        this.bookingId = 0;
+        this.customerId = 0;
+        this.yardId = 0;
+        this.bookingDate = LocalDate.parse("1990-01-01");
+        this.bookingPrice = 0;
+        this.bookingStatus = BookingStatus.COMPLETED;
+    }
 
     public Booking(int bookingId, int customerId, int yardId, LocalDate bookingDate,
                    double bookingPrice, BookingStatus bookingStatus) {
@@ -85,6 +96,14 @@ public class Booking {
                 "Booking Date: " + bookingDate + "\n" +
                 "Total Price: $" + bookingPrice + "\n" +
                 "Booking Status: " + bookingStatus;
+    }
+
+    public boolean bookingExist(int yardId, LocalDate date){
+        return BookingDAOImpl.getInstance().getBookedYardByDate(yardId, date) != null;
+    }
+
+    public boolean isBookingValid(int bookingId, int customerId) {
+        return BookingDAOImpl.getInstance().isBookingValidToCanCel(bookingId, customerId);
     }
 }
 
