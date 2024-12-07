@@ -96,6 +96,7 @@ public class Customer {
                 ", email=" + email + "]";
     }
 
+    // As instructor's suggestion (nkvd)
     public boolean customerIsExist(String username){
         Customer customer = CustomerDAOImpl.getInstance().getCustomerByUsername(username);
         return customer != null;
@@ -136,7 +137,7 @@ public class Customer {
     }
 
     public boolean cancelBooking(int bookingId) {
-        return BookingDAOImpl.getInstance().updateBookingStatusWithId(bookingId, BookingStatus.CANCEL);
+        return BookingDAOImpl.getInstance().updateBookingStatusWithId(bookingId, BookingStatus.CANCELLED);
     }
 }
 

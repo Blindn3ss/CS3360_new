@@ -70,6 +70,71 @@ public class ManagerDAOImpl implements ManagerDAO {
         return executeQuery(query);
     }
 
+    public boolean checkPermission(int managerId, int yardId) {
+        String query = "SELECT EXISTS (SELECT 1 FROM permission WHERE managerId = ? AND yardId = ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, managerId);
+            statement.setInt(2, yardId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getBoolean(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean addPermission(int managerId, int yardId){
+        PreparedStatement preparedStatement;
+        try {
+            String query = "INSERT INTO permission (managerId, yardId) VALUES (?, ?)";
+            preparedStatement = connection.prepareStatement(query);
+            setQueryParameters(preparedStatement, managerId, yardId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Error: The yardId does not exist in the yard database.");
+            return false;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean removePermission(int managerId, int yardId) {
+        PreparedStatement preparedStatement;
+        try {
+            String query = "DELETE FROM permission WHERE managerId = ? AND yardId = ?";
+            preparedStatement = connection.prepareStatement(query);
+            setQueryParameters(preparedStatement, managerId, yardId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Integer> getYardIdsForManager(int managerId) {
+        List<Integer> yardIds = new ArrayList<>();
+        String query = "SELECT yardId FROM permission WHERE managerId = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, managerId);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    yardIds.add(rs.getInt("yardId"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return yardIds;
+    }
+
     // Generalized method for executing update queries (insert, update, delete)
     private boolean executeUpdate(String query, Object... params) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {

@@ -33,16 +33,16 @@ public class WelcomeMenuAction{
             Customer customer = new Customer();
             if (customer.customerIsExist(username) && customer.customerPasswordValid(username, password)) {
                 System.out.println("Welcome Customer");
-                new CustomerMenu(customer.customerLogIn(username));
+                new CustomerMenu(customer.customerLogIn(username)).execute();
             } else {
                 System.out.println("Invalid username or password");
             }
         }
-        if (role.equals("manager")){
+        else {
             Manager manager = new Manager();
             if(manager.managerIsExist(username) && manager.managerPasswordValid(username, password)){
                 System.out.println("Welcome Manager");
-                new ManagerMenu(manager.managerLogIn(username));
+                new ManagerMenu(manager.managerLogIn(username)).execute();
             }
             else {
                 System.out.println("Invalid username or password");

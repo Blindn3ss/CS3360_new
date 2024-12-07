@@ -3,6 +3,7 @@ package org.myapp.Model;
 import org.myapp.DAO.BookingDAOImpl;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Booking {
     private int bookingId;
@@ -82,10 +83,20 @@ public class Booking {
     public String viewBooking() {
             return String.format("Booking #%d | Yard ID: %d | Date: %s | Status: %s | Total: $%.2f",
                     bookingId,
-                    customerId,
+                    yardId,
                     bookingDate.toString(),
                     bookingStatus.name(),
                     bookingPrice);
+    }
+
+    public String viewBooking2() {
+        return String.format("Booking #%d | Yard ID: #%d | Customer ID: #%d | Date: %s | Status: %s | Total: $%.2f",
+                bookingId,
+                yardId,
+                customerId,
+                bookingDate.toString(),
+                bookingStatus.name(),
+                bookingPrice);
     }
 
     public String displayBookingInfo() {
@@ -104,6 +115,10 @@ public class Booking {
 
     public boolean isBookingValid(int bookingId, int customerId) {
         return BookingDAOImpl.getInstance().isBookingValidToCanCel(bookingId, customerId);
+    }
+
+    public List<Booking> getPendingBookingOfYardInDate(int yardId, String date) {
+        return BookingDAOImpl.getInstance().getPendingBookingOfYardInDate(yardId, date);
     }
 }
 

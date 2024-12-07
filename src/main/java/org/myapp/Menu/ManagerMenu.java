@@ -13,6 +13,10 @@ public class ManagerMenu {
     public void execute() {
 
         //Lv.3
+        SubMenu scheduleAndBooking = new SubMenu("Schedule and Bookings");
+        scheduleAndBooking.addMenuItem(new ActionMenuItem("View Schedule" , managerActions::viewSchedule));
+        scheduleAndBooking.addMenuItem(new ActionMenuItem("Confirm a Booking" , managerActions::confirmBooking));
+        scheduleAndBooking.addMenuItem(new ActionMenuItem("Back", () -> {}));
 
         // Lv.2
         SubMenu profileMenu = new SubMenu("Profile");
@@ -25,7 +29,8 @@ public class ManagerMenu {
         managerSection.addMenuItem(new ActionMenuItem("Add new Yard", managerActions::addNewYard));
         managerSection.addMenuItem(new ActionMenuItem("Edit managed yards", managerActions::editManagedYards));
         managerSection.addMenuItem(new ActionMenuItem("Register to manage", managerActions::registerToManage));
-        managerSection.addMenuItem(new ActionMenuItem("Schedule and Bookings", managerActions::viewScheduleAndBookings));
+        managerSection.addMenuItem(new ActionMenuItem("Remove Management", managerActions::removeManagement));
+        managerSection.addMenuItem(scheduleAndBooking);
         managerSection.addMenuItem(new ActionMenuItem("Revenue", managerActions::viewRevenue));
         managerSection.addMenuItem(new ActionMenuItem("Back", () -> {}));
 
