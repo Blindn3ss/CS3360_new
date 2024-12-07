@@ -137,7 +137,7 @@ public class Customer {
     }
 
     public boolean cancelBooking(int bookingId) {
-        return BookingDAOImpl.getInstance().updateBookingStatusWithId(bookingId, BookingStatus.CANCELLED);
+        return BookingDAOImpl.getInstance().updateBookingWithStatus(bookingId, BookingStatus.CANCELLED);
     }
 }
 

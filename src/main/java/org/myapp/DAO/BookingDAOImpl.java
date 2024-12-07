@@ -60,7 +60,7 @@ public class BookingDAOImpl implements BookingDAO {
                 booking.getBookingId());
     }
 
-    public boolean updateBookingStatusWithId(int bookingId, BookingStatus status) {
+    public boolean updateBookingWithStatus(int bookingId, BookingStatus status) {
         String query = "UPDATE booking SET bookingStatus = ? WHERE bookingId = ?";
         return executeUpdate(query, status.name(),
                                     bookingId);

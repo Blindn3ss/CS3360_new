@@ -26,13 +26,13 @@ public class CustomerMenuAction {
 
     public void cancelBooking() {
         viewCurrentBooking();
-
         int bookingId;
         System.out.println("Enter the ID of Booking you want cancel:");
         bookingId = scanner.nextInt();
         scanner.nextLine();
+
         Booking booking = new Booking();
-        if (booking.isBookingValid(bookingId, loggedInCustomer.getCustomerId())){
+        if (!booking.isBookingValid(bookingId, loggedInCustomer.getCustomerId())){
             System.out.println("Booking ID is not valid");
             return;
         }

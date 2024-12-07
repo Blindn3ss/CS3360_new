@@ -19,7 +19,7 @@ public class SubMenu extends MenuItem {
     @Override
     public void execute() {
         while (true) {
-            System.out.println("\n\t\t\t--- " + getName() + " ---");
+            System.out.println("\n" + getName().toUpperCase());
 
             int maxWidth = 25;
 
@@ -29,7 +29,7 @@ public class SubMenu extends MenuItem {
                 System.out.print(optionText);
 
                 if (i % 2 == 0 && i + 1 < items.size()) {
-                    System.out.print("\t");
+                    System.out.print(" ");
                 }
 
                 if (i % 2 != 0 || i == items.size() - 1) {
