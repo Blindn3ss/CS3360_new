@@ -89,6 +89,13 @@ public class Customer {
         System.out.println("Email: " + email);
     }
 
+    public void viewContactInfo(){
+        System.out.println("Contact: ");
+        System.out.println("Full Name : " + fullName);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("Email: " + email);
+    }
+
     @Override
     public String toString() {
         return "Customer [customerId=" + customerId + ", username=" + username +

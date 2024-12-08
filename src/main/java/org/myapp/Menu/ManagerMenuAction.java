@@ -1,9 +1,7 @@
 package org.myapp.Menu;
 
-import org.myapp.Model.Booking;
-import org.myapp.Model.Manager;
-import org.myapp.Model.Revenue;
-import org.myapp.Model.Schedule;
+import org.myapp.DAO.BookingDAOImpl;
+import org.myapp.Model.*;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
@@ -116,7 +114,7 @@ public class ManagerMenuAction {
                 validCapacity = true;
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input! Please enter a valid integer for the yard capacity.");
-                scanner.nextLine(); // Clear the buffer
+                scanner.nextLine();
             }
         }
 
@@ -140,15 +138,33 @@ public class ManagerMenuAction {
         System.out.println("Enter a description of the yard: ");
         String description = scanner.nextLine().trim();
 
-        if (loggedInManager.addNewYard(yardName, yardLocation, yardCapacity,
-                surfaceType, pricePerDay, description)) {
-            System.out.println("You just add a new Yard to database");
-        } else {
-            System.out.println("Something went wrong.");
+        Yard yard = new Yard(0, yardName, yardLocation, yardCapacity, surfaceType, pricePerDay, description);
+        yard.yardInfo();
+
+        String confirmation = "";
+        while (true) {
+            System.out.print("\n\"Are you sure want to add this yard into database? (y/n)\"");
+            confirmation = scanner.nextLine().trim().toLowerCase();
+
+            if (confirmation.equals("y")) {
+                if (loggedInManager.addNewYard(yardName, yardLocation, yardCapacity,
+                        surfaceType, pricePerDay, description)) {
+                    System.out.println("You just add a new Yard to database");
+                } else {
+                    System.out.println("Something went wrong.");
+                }
+                break;
+            } else if (confirmation.equals("n")) {
+                System.out.println("You cancelled adding new yard.");
+                break;
+            } else {
+                System.out.println("Invalid input. Please enter 'y' for Yes or 'n' for No.");
+            }
         }
     }
 
     public void editManagedYards() {
+        loggedInManager.showCurrentManagedYards();
         System.out.print("Type the ID of Yard: ");
         int yardId = scanner.nextInt();
         scanner.nextLine();
@@ -224,7 +240,7 @@ public class ManagerMenuAction {
             }
         }));
 
-        editManagedYard.addMenuItem(new ActionMenuItem("Change Yard's Price Per Day", () -> {
+        editManagedYard.addMenuItem(new ActionMenuItem("Change Yard's Price", () -> {
             double pricePerDay;
             while (true) {
                 System.out.println("Type new Price Per Day of the yard: ");
@@ -271,6 +287,7 @@ public class ManagerMenuAction {
     }
 
     public void removeManagement() {
+        loggedInManager.showCurrentManagedYards();
         int yardId;
         while (true) {
             System.out.println("Type the yard ID you want to remove your management right from: ");
@@ -337,7 +354,7 @@ public class ManagerMenuAction {
         List<Booking> pendings = booking.getPendingBookingOfYardInDate(yardId, date);
 
         if (pendings.isEmpty()){
-            System.out.println("There is no pending booking of yard #" + yardId + "in " + date);
+            System.out.println("There is no pending booking of yard #" + yardId + " in " + date);
             return;
         }
 
@@ -347,6 +364,7 @@ public class ManagerMenuAction {
         }
         System.out.println();
 
+        Booking bookingToConfirm = null;
         while (true) {
             System.out.print("Choose the booking ID you want to confirm: ");
             if (scanner.hasNextInt()) {
@@ -356,6 +374,7 @@ public class ManagerMenuAction {
                     for (Booking b : pendings) {
                         if (b.getBookingId() == bookingId) {
                             isValidBookingId = true;
+                            bookingToConfirm = b;
                             break;
                         }
                     }
@@ -372,6 +391,10 @@ public class ManagerMenuAction {
                 scanner.next();
             }
         }
+
+        bookingToConfirm.viewBooking();
+        bookingToConfirm.getContactInfoOfCustomer();
+
         scanner.nextLine();
         System.out.println("\nNOTE: ");
         System.out.println("If there are many pending bookings in a date,");

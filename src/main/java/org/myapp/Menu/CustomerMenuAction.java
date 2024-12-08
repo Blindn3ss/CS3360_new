@@ -54,7 +54,7 @@ public class CustomerMenuAction {
         }
         else{
             for (Booking booking : bookingHistory){
-                System.out.println(booking.viewBooking());
+                booking.viewBooking();
             }
         }
     }
@@ -69,7 +69,7 @@ public class CustomerMenuAction {
         }
         else{
             for (Booking booking : pendingBookings){
-                System.out.println(booking.viewBooking());
+                booking.viewBooking();
             }
         }
 
@@ -83,7 +83,7 @@ public class CustomerMenuAction {
         }
         else{
             for (Booking booking : confirmedBookings){
-                System.out.println(booking.viewBooking());
+                booking.viewBooking();
             }
         }
         System.out.println();

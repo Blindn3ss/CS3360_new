@@ -1,6 +1,8 @@
 package org.myapp.Model;
 
 import org.myapp.DAO.BookingDAOImpl;
+import org.myapp.DAO.CustomerDAOImpl;
+import org.myapp.DAO.ManagerDAOImpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -80,13 +82,13 @@ public class Booking {
         this.bookingStatus = bookingStatus;
     }
 
-    public String viewBooking() {
-            return String.format("Booking #%d | Yard ID: %d | Date: %s | Status: %s | Total: $%.2f",
-                    bookingId,
-                    yardId,
-                    bookingDate.toString(),
-                    bookingStatus.name(),
-                    bookingPrice);
+    public void viewBooking() {
+        System.out.printf("Booking #%d | Yard ID: %d | Date: %s | Status: %s | Total: $%.2f%n",
+                bookingId,
+                yardId,
+                bookingDate.toString(),
+                bookingStatus.name(),
+                bookingPrice);
     }
 
     public String viewBooking2() {
@@ -119,6 +121,11 @@ public class Booking {
 
     public List<Booking> getPendingBookingOfYardInDate(int yardId, String date) {
         return BookingDAOImpl.getInstance().getPendingBookingOfYardInDate(yardId, date);
+    }
+
+    public void getContactInfoOfCustomer(){
+        Customer customer = CustomerDAOImpl.getInstance().getCustomerById(this.customerId);
+        customer.viewContactInfo();
     }
 }
 

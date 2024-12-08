@@ -254,5 +254,14 @@ public class Manager {
             }
         }
     }
+
+    public void showCurrentManagedYards(){
+        List<Integer> yardIds = ManagerDAOImpl.getInstance().getYardIdsForManager(this.managerId);
+        for (int i : yardIds){
+            Yard yard = YardDAOImpl.getInstance().getYardById(i);
+            System.out.println(yard.yardInfo());
+        }
+        System.out.println();
+    }
 }
 
