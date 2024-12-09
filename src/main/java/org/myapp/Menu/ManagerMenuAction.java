@@ -1,16 +1,15 @@
 package org.myapp.Menu;
 
 import org.myapp.DAO.BookingDAOImpl;
-import org.myapp.DAO.YardDAOImpl;
 import org.myapp.Model.*;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
-import static org.myapp.Menu.Utility.*;
+import static org.myapp.Menu.Utility.isValidDateFormat;
+import static org.myapp.Menu.Utility.isValidEmailFormat;
 
 public class ManagerMenuAction {
     private final Manager loggedInManager;
@@ -99,16 +98,9 @@ public class ManagerMenuAction {
     }
 
     public void addNewYard() {
-        //we need to check whether the new yard name is identical with other's ones or not
-        boolean nameFound = false;
         System.out.println("Enter the name of the yard: ");
         String yardName = scanner.nextLine().trim();
-        for (Yard yard : loggedInManager.getListOfAllYards()) {
-            if (yardName.equals(yard.getYardName())) {
-                System.out.println("You can not enter the existed Yard Name!!");
-                return;
-            }
-        }
+
         System.out.println("Enter the location of the yard: ");
         String yardLocation = scanner.nextLine().trim();
 
@@ -166,20 +158,17 @@ public class ManagerMenuAction {
                 System.out.println("You cancelled adding new yard.");
                 break;
             } else {
-                System.out.println("Invalid input. Please enter 'y' (Yes) or 'n' (No).");
+                System.out.println("Invalid input. Please enter 'y' for Yes or 'n' for No.");
             }
         }
     }
 
     public void editManagedYards() {
-        //check user input
-        if (!loggedInManager.showCurrentManagedYards()) {
-            System.out.println("You have not managed any yard yet!!");
-            return;//end this function the
-        }
+        loggedInManager.showCurrentManagedYards();
         System.out.print("Type the ID of Yard: ");
         int yardId = scanner.nextInt();
         scanner.nextLine();
+
         if (!loggedInManager.havePermission(yardId)) {
             System.out.println("You don't manage this yard.");
             System.out.println("Please choose another ID.");
@@ -194,13 +183,6 @@ public class ManagerMenuAction {
             while (yardName.isEmpty()) {
                 System.out.println("Yard's Name should not be empty");
                 yardName = scanner.nextLine().trim();
-            }
-            //check existed yardName
-            for (Yard yard : loggedInManager.getListOfAllYards()) {
-                if (Objects.equals(yard.getYardName(), yardName)) {
-                    System.out.println("You can not enter the already existed yard name");
-                    return;
-                }
             }
             if (loggedInManager.updateYardName(yardId, yardName)) {
                 System.out.println("Name of Yard " + yardId + " has been successfully updated to: " + yardName);
@@ -285,18 +267,6 @@ public class ManagerMenuAction {
     }
 
     public void registerToManage() {
-        //print unmanagedYard
-        System.out.println("Unmanaged yard");
-        int countNumbYards = 0;
-        System.out.println("Here are the yards ID that no one manages!");
-        if(loggedInManager.getListOfUnmanagedYards().isEmpty()){
-            System.out.println("There is no available unmanaged yard yet!!");
-            return;
-        }
-        for(Yard yard : loggedInManager.getListOfUnmanagedYards()){
-            System.out.printf("Yard ID: %s, Yard's Name: %s\n", yard.getYardId(), yard.getYardName());
-        }
-
         int yardId;
         while (true) {
             System.out.println("Type the yard ID you want to register: ");
@@ -317,10 +287,7 @@ public class ManagerMenuAction {
     }
 
     public void removeManagement() {
-        if (!loggedInManager.showCurrentManagedYards()) {
-            System.out.println("You have not managed any yard yet!!");
-            return;
-        }
+        loggedInManager.showCurrentManagedYards();
         int yardId;
         while (true) {
             System.out.println("Type the yard ID you want to remove your management right from: ");
@@ -342,9 +309,10 @@ public class ManagerMenuAction {
     public void viewSchedule() {
         Schedule schedule = new Schedule();
         List<Integer> yardIdList = loggedInManager.getListOfYardId();
-        if (yardIdList.isEmpty()) {
+        if (yardIdList.isEmpty()){
             System.out.println("It seems like you need to register to manage some yards!");
-        } else {
+        }
+        else {
             schedule.setSchedule(yardIdList);
             schedule.viewSchedule();
         }
@@ -352,17 +320,17 @@ public class ManagerMenuAction {
     }
 
     public void confirmBooking() {
-        int yardId = -1;
-        String date = "";
+        int yardId;
+        String date;
         int bookingId = -1;
-        boolean wrongYardId = true;
-        boolean wrongDateInput = true;
-        while (wrongYardId) {
+        while (true) {
             System.out.print("Type yard ID: ");
             if (scanner.hasNextInt()) {
                 yardId = scanner.nextInt();
                 if (yardId > 0) {
-                    wrongYardId = false;
+                    break;
+                } else if (yardId == 0) {
+                    return;
                 } else {
                     System.out.println("Please enter a positive integer for yard ID.");
                 }
@@ -370,20 +338,14 @@ public class ManagerMenuAction {
                 System.out.println("Invalid input. Please enter a valid integer for yard ID.");
                 scanner.next();
             }
-            if(!loggedInManager.havePermission(yardId)){
-                System.out.println("You do not have permission to manage that yard!!");
-                wrongYardId = true;
-            }
         }
         scanner.nextLine();
-        while (wrongDateInput) {
+        while(true) {
             System.out.print("Type date (yyyy-mm-dd): ");
             date = scanner.nextLine().trim();
-            LocalDate lcDate = LocalDate.parse(date);
             if (isValidDateFormat(date)) {
-                wrongDateInput = false;
-            }
-            else {
+                break;
+            } else {
                 System.out.println("Invalid date format. Please enter the date in yyyy-mm-dd format.");
             }
         }
@@ -391,7 +353,7 @@ public class ManagerMenuAction {
         Booking booking = new Booking();
         List<Booking> pendings = booking.getPendingBookingOfYardInDate(yardId, date);
 
-        if (pendings.isEmpty()) {
+        if (pendings.isEmpty()){
             System.out.println("There is no pending booking of yard #" + yardId + " in " + date);
             return;
         }
@@ -444,9 +406,10 @@ public class ManagerMenuAction {
             confirmation = scanner.nextLine().trim().toLowerCase();
 
             if (confirmation.equals("y")) {
-                if (loggedInManager.confirmBooking(bookingId, pendings)) {
+                if (loggedInManager.confirmBooking(bookingId, pendings)){
                     System.out.println("You confirmed the booking #" + bookingId);
-                } else {
+                }
+                else {
                     System.out.println("Something went wrong.");
                 }
                 break;

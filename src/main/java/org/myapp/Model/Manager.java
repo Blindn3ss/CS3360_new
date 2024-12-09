@@ -7,7 +7,6 @@ import org.myapp.Database.Database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Manager {
@@ -18,7 +17,7 @@ public class Manager {
     private String phoneNumber;
     private String email;
 
-    public Manager() {
+    public Manager(){
         this.managerId = 0;
         this.username = "";
         this.password = "";
@@ -110,11 +109,11 @@ public class Manager {
         return manager.getPassword().equals(password);
     }
 
-    public Manager managerLogIn(String username) {
+    public Manager managerLogIn(String username){
         return ManagerDAOImpl.getInstance().getManagerByUserName(username);
     }
 
-    public boolean managerSignUp(String username, String password, String fullName, String phoneNumber, String email) {
+    public boolean managerSignUp(String username, String password, String fullName, String phoneNumber, String email){
         Manager manager = new Manager(-1, username, password, fullName, phoneNumber, email);
         return ManagerDAOImpl.getInstance().createManager(manager);
     }
@@ -174,37 +173,16 @@ public class Manager {
         return YardDAOImpl.getInstance().updateYard(yard);
     }
 
-    public boolean registerToManage(int yardId) {
+    public boolean registerToManage(int yardId){
         return ManagerDAOImpl.getInstance().addPermission(this.managerId, yardId);
     }
 
     public boolean removeManagement(int yardId) {
-
         return ManagerDAOImpl.getInstance().removePermission(this.managerId, yardId);
     }
 
-    public List<Integer> getListOfYardId() {
+    public List<Integer> getListOfYardId(){
         return ManagerDAOImpl.getInstance().getYardIdsForManager(this.managerId);
-    }
-
-    public List<Yard> getListOfAllYards() {
-        return YardDAOImpl.getInstance().getAllYards();
-    }
-
-    public List<Yard> getListOfUnmanagedYards() {
-        List<Yard> uYard = new ArrayList<>();
-        for (Manager manager : getListAllManagers()) {
-            for (Yard yard : getListOfAllYards()) {
-                if (!havePermission(yard.getYardId())) {
-                    uYard.add(yard);
-                }
-            }
-        }
-        return uYard;
-    }
-
-    public List<Manager> getListAllManagers() {
-        return ManagerDAOImpl.getInstance().getAllManagers();
     }
 
 
@@ -217,7 +195,7 @@ public class Manager {
      * @param bookingId The ID of the booking to confirm.
      * @param pendings  The list of pending bookings to process.
      * @return {@code true} if all updates were successful, {@code false} otherwise. If an exception occurs,
-     * or if any update fails, the transaction is rolled back.
+     *         or if any update fails, the transaction is rolled back.
      */
     @SuppressWarnings("CallToPrintStackTrace")
     public boolean confirmBooking(int bookingId, List<Booking> pendings) {
@@ -277,18 +255,13 @@ public class Manager {
         }
     }
 
-    public boolean showCurrentManagedYards() {
+    public void showCurrentManagedYards(){
         List<Integer> yardIds = ManagerDAOImpl.getInstance().getYardIdsForManager(this.managerId);
-        if (yardIds.isEmpty()) {
-            return false;
-        }
-        System.out.println("Here are your managed yards");
-        for (int i : yardIds) {
+        for (int i : yardIds){
             Yard yard = YardDAOImpl.getInstance().getYardById(i);
             System.out.println(yard.yardInfo());
         }
         System.out.println();
-        return true;
     }
 }
 
