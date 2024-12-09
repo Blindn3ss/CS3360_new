@@ -37,7 +37,7 @@ public class CustomerMenuAction {
             return;
         }
         if (loggedInCustomer.cancelBooking(bookingId)){
-            System.out.println("You canceled the Booking #" + bookingId + " successfully.\n");
+            System.out.println("You canceled the Booking #" + bookingId + " successfully.");
         }
         else {
             System.out.println("Something went wrong. Try again later!");
