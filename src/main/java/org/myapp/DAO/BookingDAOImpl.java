@@ -5,11 +5,9 @@ import org.myapp.Model.BookingStatus;
 import org.myapp.Database.Database;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class BookingDAOImpl implements BookingDAO {
@@ -133,7 +131,7 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     public Map<Integer, List<Booking>> getBookingsForYards(List<Integer> yardIds) {
-        Map<Integer, List<Booking>> bookingsMap = new HashMap<>();
+        Map<Integer, List<Booking>> bookingsMap = new LinkedHashMap<>();
         String query = "SELECT * FROM booking WHERE yardId = ? AND bookingStatus IN ('PENDING', 'CONFIRMED')";
 
         for (int yardId : yardIds) {

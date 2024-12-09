@@ -1,10 +1,7 @@
 package org.myapp.Menu;
 
 import org.myapp.DAO.YardDAOImpl;
-import org.myapp.Model.Booking;
-import org.myapp.Model.BookingStatus;
-import org.myapp.Model.Customer;
-import org.myapp.Model.Yard;
+import org.myapp.Model.*;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
@@ -91,17 +88,28 @@ public class CustomerMenuAction {
 
     public void bookNow() {
         int yardId;
+        Yard yard;
         LocalDate date = null;
 
-        System.out.println("Enter the Yard ID you want to book: ");
-        yardId = scanner.nextInt();
-        scanner.nextLine();
-
-        Yard yard = YardDAOImpl.getInstance().getYardById(yardId);
-        if (yard == null){
-            System.out.println("Yard ID is not valid");
-            return;
+        while (true) {
+            System.out.println("Enter the Yard ID you want to book: ");
+            if (scanner.hasNextInt()) {
+                yardId = scanner.nextInt();
+                scanner.nextLine();
+                yard = YardDAOImpl.getInstance().getYardById(yardId);
+                if (yard != null) {
+                    break;
+                } else {
+                    System.out.println("Yard ID is not valid. Please enter a valid Yard ID:");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid integer for Yard ID:");
+                scanner.nextLine();
+            }
         }
+
+        Schedule schedule = new Schedule();
+        schedule.viewScheduleForCustomer(yardId);
 
         System.out.println("Enter the date (YYYY--MM-DD): ");
         String input;

@@ -98,6 +98,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
         } catch (SQLIntegrityConstraintViolationException e) {
             System.out.println("Error: The yardId does not exist in the yard database.");
+            System.out.println("Or 'this' manager already had the permission.");
             return false;
         } catch (SQLException e) {
             return false;

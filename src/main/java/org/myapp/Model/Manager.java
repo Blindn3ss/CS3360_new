@@ -255,13 +255,18 @@ public class Manager {
         }
     }
 
-    public void showCurrentManagedYards(){
+    public boolean showCurrentManagedYards(){
         List<Integer> yardIds = ManagerDAOImpl.getInstance().getYardIdsForManager(this.managerId);
+        if (yardIds.isEmpty()) {
+            return false;
+        }
+        System.out.println("Here are your managed yards: ");
         for (int i : yardIds){
             Yard yard = YardDAOImpl.getInstance().getYardById(i);
             System.out.println(yard.yardInfo());
         }
         System.out.println();
+        return true;
     }
 }
 

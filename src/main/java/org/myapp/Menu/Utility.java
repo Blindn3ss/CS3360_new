@@ -6,7 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utility {
-    public static LocalDate latestAlowedDate = LocalDate.now().plusDays(14);
+    public  static int LIMIT = 14;
+    public static LocalDate latestAlowedDate = LocalDate.now().plusDays(LIMIT);
 
     public static boolean isValidEmailFormat(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";

@@ -164,7 +164,10 @@ public class ManagerMenuAction {
     }
 
     public void editManagedYards() {
-        loggedInManager.showCurrentManagedYards();
+        if (!loggedInManager.showCurrentManagedYards()) {
+            System.out.println("You have not managed any yard yet!!");
+            return;
+        }
         System.out.print("Type the ID of Yard: ");
         int yardId = scanner.nextInt();
         scanner.nextLine();
@@ -287,7 +290,10 @@ public class ManagerMenuAction {
     }
 
     public void removeManagement() {
-        loggedInManager.showCurrentManagedYards();
+        if (!loggedInManager.showCurrentManagedYards()) {
+            System.out.println("You have not managed any yard yet!!");
+            return;
+        }
         int yardId;
         while (true) {
             System.out.println("Type the yard ID you want to remove your management right from: ");
@@ -313,8 +319,7 @@ public class ManagerMenuAction {
             System.out.println("It seems like you need to register to manage some yards!");
         }
         else {
-            schedule.setSchedule(yardIdList);
-            schedule.viewSchedule();
+            schedule.viewScheduleForManager(yardIdList);
         }
 
     }
@@ -328,6 +333,10 @@ public class ManagerMenuAction {
             if (scanner.hasNextInt()) {
                 yardId = scanner.nextInt();
                 if (yardId > 0) {
+                    if (!loggedInManager.havePermission(yardId)){
+                        System.out.println("You don't have permission on this yard.");
+                        return;
+                    }
                     break;
                 } else if (yardId == 0) {
                     return;

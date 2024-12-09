@@ -22,7 +22,6 @@ public class Revenue {
             List<Double> monthlyRevenue = new ArrayList<>(12);
             for (int month = 1; month <= 12; month++) {
                 double revenue = BookingDAOImpl.getInstance().getRevenueOfYardInMonth(yardId, month, year);
-
                 monthlyRevenue.add(revenue);
             }
             revenueData.put(yardId, monthlyRevenue);
