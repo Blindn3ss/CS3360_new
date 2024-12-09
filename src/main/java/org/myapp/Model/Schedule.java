@@ -92,7 +92,6 @@ public class Schedule {
                     }
                 }
                 else {
-                    // If bookings are null, print "NONE" for that yard
                     System.out.printf("| %-"+(yardColumnWidth-2)+"s", "NONE");
                 }
             }
@@ -118,7 +117,6 @@ public class Schedule {
             upcomingDates.add(today.plusDays(i));
         }
 
-        // Get bookings for the yard
         List<Booking> bookings = BookingDAOImpl.getInstance().getBookingsByYardId(yardId);
 
         Map<LocalDate, String> scheduleForCustomer = new LinkedHashMap<>();
@@ -135,7 +133,6 @@ public class Schedule {
             }
         }
 
-        // Print the schedule sorted by date (since TreeSet is sorted)
         printCustomerScheduleTable(scheduleForCustomer);
     }
 
