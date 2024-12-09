@@ -8,8 +8,8 @@ import java.util.*;
 // Note this revenue can be better, for now just let it be for the project (nkvd)
 
 public class Revenue {
-    private Map<Integer, List<Double>> revenueData;
-    private int year;
+    private final Map<Integer, List<Double>> revenueData;
+    private final int year;
 
     public Revenue(int year) {
         this.year = year;

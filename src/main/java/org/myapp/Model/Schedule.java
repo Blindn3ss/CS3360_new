@@ -14,7 +14,7 @@ public class Schedule {
     public void viewScheduleForManager(List<Integer> managedYardId) {
         // concurrency - larger fake database (remove, try it after project)
         // Or can make a function to sort and count
-        // Took many time for this so please dont change this except column width (nkvd)
+        // Took many times for this so please dont change this except column width (nkvd)
 
         // get all date
         Map<Integer, List<Booking>> schedule = BookingDAOImpl.getInstance().getBookingsForYards(managedYardId);

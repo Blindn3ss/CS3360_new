@@ -1,6 +1,5 @@
 package org.myapp.Menu;
 
-import org.myapp.DAO.BookingDAOImpl;
 import org.myapp.Model.*;
 
 import java.time.LocalDate;
@@ -141,7 +140,7 @@ public class ManagerMenuAction {
         Yard yard = new Yard(0, yardName, yardLocation, yardCapacity, surfaceType, pricePerDay, description);
         yard.yardInfo();
 
-        String confirmation = "";
+        String confirmation;
         while (true) {
             System.out.print("\n\"Are you sure want to add this yard into database? (y/n)\"");
             confirmation = scanner.nextLine().trim().toLowerCase();
@@ -164,8 +163,8 @@ public class ManagerMenuAction {
     }
 
     public void editManagedYards() {
-        if (!loggedInManager.showCurrentManagedYards()) {
-            System.out.println("You have not managed any yard yet!!");
+        if (loggedInManager.showCurrentManagedYards()) {
+            System.out.println("You have not managed any yard yet.");
             return;
         }
         System.out.print("Type the ID of Yard: ");
@@ -270,6 +269,10 @@ public class ManagerMenuAction {
     }
 
     public void registerToManage() {
+        for (Yard yard : loggedInManager.getListOfUnmanagedYards()){
+            System.out.println(yard.yardInfo());
+        }
+        System.out.println("Above are yards you are not managing.");
         int yardId;
         while (true) {
             System.out.println("Type the yard ID you want to register: ");
@@ -290,7 +293,7 @@ public class ManagerMenuAction {
     }
 
     public void removeManagement() {
-        if (!loggedInManager.showCurrentManagedYards()) {
+        if (loggedInManager.showCurrentManagedYards()) {
             System.out.println("You have not managed any yard yet!!");
             return;
         }
@@ -327,7 +330,7 @@ public class ManagerMenuAction {
     public void confirmBooking() {
         int yardId;
         String date;
-        int bookingId = -1;
+        int bookingId;
         while (true) {
             System.out.print("Type yard ID: ");
             if (scanner.hasNextInt()) {
@@ -409,7 +412,7 @@ public class ManagerMenuAction {
         System.out.println("If there are many pending bookings in a date,");
         System.out.println("confirming one of them will cancel the rest.");
 
-        String confirmation = "";
+        String confirmation;
         while (true) {
             System.out.print("\nAre you sure you want to confirm this (y/n)? ");
             confirmation = scanner.nextLine().trim().toLowerCase();

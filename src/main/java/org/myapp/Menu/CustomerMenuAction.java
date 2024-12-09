@@ -265,7 +265,7 @@ public class CustomerMenuAction {
         AtomicReference<String> surfaceType = new AtomicReference<>();
 
         // The view with filter is a menu getting options from user
-        SubMenu viewYardsWithFilter = new SubMenu("viewYardWithFilter");
+        SubMenu viewYardsWithFilter = new SubMenu("VIEW YARD WITH FILTERS");
 
         viewYardsWithFilter.addMenuItem(new ActionMenuItem("Current Filter", ()->{
             System.out.println("\n--- Current Filters ---");

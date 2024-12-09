@@ -7,6 +7,7 @@ import org.myapp.Database.Database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Manager {
@@ -257,16 +258,23 @@ public class Manager {
 
     public boolean showCurrentManagedYards(){
         List<Integer> yardIds = ManagerDAOImpl.getInstance().getYardIdsForManager(this.managerId);
-        if (yardIds.isEmpty()) {
-            return false;
+        if (!yardIds.isEmpty()){
+            for (int i : yardIds){
+                Yard yard = YardDAOImpl.getInstance().getYardById(i);
+                System.out.println(yard.yardInfo());
+            }
         }
-        System.out.println("Here are your managed yards: ");
-        for (int i : yardIds){
-            Yard yard = YardDAOImpl.getInstance().getYardById(i);
-            System.out.println(yard.yardInfo());
+        return yardIds.isEmpty();
+    }
+
+    public List<Yard> getListOfUnmanagedYards() {
+        List<Yard> uYard = new ArrayList<>();
+        for (Yard yard : YardDAOImpl.getInstance().getAllYards()) {
+            if (!havePermission(yard.getYardId())) {
+                uYard.add(yard);
+            }
         }
-        System.out.println();
-        return true;
+        return uYard;
     }
 }
 
