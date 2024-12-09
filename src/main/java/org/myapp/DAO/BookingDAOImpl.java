@@ -48,6 +48,7 @@ public class BookingDAOImpl implements BookingDAO {
                                     booking.getBookingId());
     }
 
+    @Override
     public boolean updateBookingWithConnection(Connection connection, Booking booking) {
         String query = "UPDATE booking SET customerId = ?, yardId = ?, bookingDate = ?, bookingPrice = ?, bookingStatus = ? WHERE bookingId = ?";
         return executeUpdateWithConnection(connection, query, booking.getCustomerId(),
@@ -58,6 +59,7 @@ public class BookingDAOImpl implements BookingDAO {
                 booking.getBookingId());
     }
 
+    @Override
     public boolean updateBookingWithStatus(int bookingId, BookingStatus status) {
         String query = "UPDATE booking SET bookingStatus = ? WHERE bookingId = ?";
         return executeUpdate(query, status.name(),
@@ -88,6 +90,7 @@ public class BookingDAOImpl implements BookingDAO {
         return executeQuery(query, yardId);
     }
 
+    @Override
     public Booking getBookedYardByDate(int yardId, LocalDate date) {
         String query = "SELECT * FROM booking WHERE yardId = ? AND bookingDate = ? AND bookingStatus = 'CONFIRMED'";
         return executeQuery(query, yardId, Date.valueOf(date)).stream().findFirst().orElse(null);
@@ -107,6 +110,7 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     // Note: If can not use generalize, then manually do from beginning (nkvd)
+    @Override
     public boolean isBookingValidToCanCel(int bookingId, int customerId) {
         String query = "SELECT EXISTS (" +
                 "SELECT 1 " +
@@ -130,6 +134,7 @@ public class BookingDAOImpl implements BookingDAO {
         }
     }
 
+    @Override
     public Map<Integer, List<Booking>> getBookingsForYards(List<Integer> yardIds) {
         Map<Integer, List<Booking>> bookingsMap = new LinkedHashMap<>();
         String query = "SELECT * FROM booking WHERE yardId = ? AND bookingStatus IN ('PENDING', 'CONFIRMED')";
@@ -158,6 +163,7 @@ public class BookingDAOImpl implements BookingDAO {
         return bookingsMap;
     }
 
+    @Override
     public List<Booking> getPendingBookingOfYardInDate(int yardId, String date) {
         String query = "SELECT * FROM booking WHERE yardId = ? AND bookingDate = ? AND bookingStatus = 'PENDING'";
         LocalDate localDate = LocalDate.parse(date);
@@ -165,6 +171,7 @@ public class BookingDAOImpl implements BookingDAO {
         return executeQuery(query, yardId, sqlDate);
     }
 
+    @Override
     public double getRevenueOfYardInMonth(int yardId, int month, int year) {
         String query = "SELECT SUM(bookingPrice) AS totalRevenue " +
                 "FROM booking " +

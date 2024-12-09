@@ -2,7 +2,6 @@ package org.myapp.Model;
 
 import org.myapp.DAO.BookingDAOImpl;
 import org.myapp.DAO.CustomerDAOImpl;
-import org.myapp.DAO.ManagerDAOImpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -91,14 +90,14 @@ public class Booking {
                 bookingPrice);
     }
 
-    public String viewBooking2() {
-        return String.format("Booking #%d | Yard ID: #%d | Customer ID: #%d | Date: %s | Status: %s | Total: $%.2f",
+    public void viewBooking2() {
+        System.out.printf(String.format("Booking #%d | Yard ID: #%d | Customer ID: #%d | Date: %s | Status: %s | Total: $%.2f",
                 bookingId,
                 yardId,
                 customerId,
                 bookingDate.toString(),
                 bookingStatus.name(),
-                bookingPrice);
+                bookingPrice));
     }
 
     public String displayBookingInfo() {

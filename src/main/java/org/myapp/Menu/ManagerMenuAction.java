@@ -372,7 +372,7 @@ public class ManagerMenuAction {
 
         System.out.println();
         for (Booking b : pendings) {
-            System.out.println(b.viewBooking2());
+            b.viewBooking2();
         }
         System.out.println();
 

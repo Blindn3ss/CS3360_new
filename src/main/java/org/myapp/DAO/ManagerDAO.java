@@ -17,6 +17,14 @@ public interface ManagerDAO {
     Manager getManagerByUserName(String username);
 
     List<Manager> getAllManagers();
+
+    boolean checkPermission(int managerId, int yardId);
+
+    boolean addPermission(int managerId, int yardId);
+
+    boolean removePermission(int managerId, int yardId);
+
+    List<Integer> getYardIdsForManager(int managerId);
 }
 
 

@@ -73,7 +73,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     // Generalized method for executing update queries (insert, update, delete)
-    public boolean executeUpdate(String query, Object... params) {
+    private boolean executeUpdate(String query, Object... params) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             setQueryParameters(preparedStatement, params);
             int rowsAffected = preparedStatement.executeUpdate();
@@ -84,7 +84,8 @@ public class CustomerDAOImpl implements CustomerDAO {
         return false;
     }
 
-    public List<Customer> executeQuery(String query, Object... params) {
+
+    private List<Customer> executeQuery(String query, Object... params) {
         List<Customer> customers = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             setQueryParameters(preparedStatement, params);

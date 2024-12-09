@@ -70,6 +70,7 @@ public class ManagerDAOImpl implements ManagerDAO {
         return executeQuery(query);
     }
 
+    @Override
     public boolean checkPermission(int managerId, int yardId) {
         String query = "SELECT EXISTS (SELECT 1 FROM permission WHERE managerId = ? AND yardId = ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -86,6 +87,7 @@ public class ManagerDAOImpl implements ManagerDAO {
         return false;
     }
 
+    @Override
     public boolean addPermission(int managerId, int yardId){
         PreparedStatement preparedStatement;
         try {
@@ -105,6 +107,7 @@ public class ManagerDAOImpl implements ManagerDAO {
         }
     }
 
+    @Override
     public boolean removePermission(int managerId, int yardId) {
         PreparedStatement preparedStatement;
         try {
@@ -119,6 +122,7 @@ public class ManagerDAOImpl implements ManagerDAO {
         }
     }
 
+    @Override
     public List<Integer> getYardIdsForManager(int managerId) {
         List<Integer> yardIds = new ArrayList<>();
         String query = "SELECT yardId FROM permission WHERE managerId = ?";
